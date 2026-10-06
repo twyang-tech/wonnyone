@@ -5,23 +5,23 @@ from .theme import WARNING_COLOR, style_surface, style_text
 
 
 def confirmation_summary(plan):
-    changed = sum(
-        item.source.name != item.destination.name
-        or (item.media.kind == '이미지' and
-            (plan.options.output_format != '원본 유지' or plan.options.compression != '압축 안 함'))
-        for item in plan.files
-    )
-    flags = {label: any(f' — {label}:' in warning for warning in plan.warnings)
-             for label in ('누락', '중복', '예상 외')}
-    lines = [f'총 {len(plan.files)}개 파일을 처리합니다. 계속할까요?',
-             f'처리 대상: {len(plan.files)}개 · 변경 예정: {changed}개 · 경고: {len(plan.warnings)}개',
-             '변경 예정은 파일명 변경 또는 이미지 변환·압축 대상입니다.',
-             '해상도: ' + ' / '.join(f'{label} {"있음" if found else "없음"}' for label, found in flags.items())]
-    if plan.options.overwrite:
-        lines.append('원본 위치 처리: 이름이 바뀌면 저장 성공 후 원본이 제거됩니다.')
-    else:
-        lines.append('복사본 저장: 원본은 유지됩니다.')
-    return '\n'.join(lines)
+    renamed = sum(item.source.name != item.destination.name for item in plan.files)
+    images = sum(item.media.kind == '이미지' for item in plan.files)
+    videos = sum(item.media.kind == '영상' for item in plan.files)
+    actions = ['파일명 변경' if renamed else '파일명 유지']
+    if images and plan.options.output_format != '원본 유지':
+        actions.append('이미지 포맷 변환')
+    if images and plan.options.compression != '압축 안 함':
+        actions.append('이미지 압축')
+    actions.append('원본 위치 저장 (이름 변경 시 원본 제거)' if plan.options.overwrite else '복사본 저장 (원본 유지)')
+    return '\n'.join([
+        f'총 {len(plan.files)}개 파일을 처리합니다.',
+        f'이름 변경 예정 {renamed}개',
+        f'이미지 {images}개 / 영상 {videos}개',
+        f'경고 {len(plan.warnings)}건',
+        ' / '.join(actions),
+        '위 작업을 실행할까요?',
+    ])
 
 
 def confirm_execution(parent, plan):
@@ -36,22 +36,6 @@ def confirm_execution(parent, plan):
     dialog.resizable(True, True)
     ttk.Label(dialog, text=confirmation_summary(plan), wraplength=580, justify='left').pack(
         fill='x', padx=18, pady=16)
-    if plan.warnings:
-        style = ttk.Style(dialog)
-        style.configure('Warning.TLabelframe.Label', foreground=WARNING_COLOR)
-        frame = ttk.LabelFrame(dialog, text='경고 내용', style='Warning.TLabelframe')
-        frame.pack(fill='both', expand=True, padx=18, pady=(0, 12))
-        text = tk.Text(frame, height=8, width=72, wrap='word', takefocus=True)
-        style_text(text)
-        scroll = ttk.Scrollbar(frame, command=text.yview)
-        text.configure(yscrollcommand=scroll.set)
-        scroll.pack(side='right', fill='y')
-        text.pack(fill='both', expand=True)
-        text.insert('1.0', '\n'.join(plan.warnings), 'warning')
-        text.configure(state='disabled')
-        # Text normally consumes Tab; allow traversal through the modal controls.
-        text.bind('<Tab>', lambda e: (e.widget.tk_focusNext().focus_set(), 'break')[1])
-        text.bind('<Shift-Tab>', lambda e: (e.widget.tk_focusPrev().focus_set(), 'break')[1])
     buttons = ttk.Frame(dialog)
     buttons.pack(fill='x', padx=18, pady=(0, 16))
 

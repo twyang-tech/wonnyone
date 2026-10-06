@@ -223,12 +223,21 @@ class App(_BaseTk):
 
         pad = {"padx": 10, "pady": 6}
 
-        # Keep the existing vertical layout usable on smaller Windows screens.
         body = ttk.Frame(self)
         body.pack(fill="both", expand=True, padx=10, pady=10)
-        canvas = tk.Canvas(body, highlightthickness=0)
+        body.columnconfigure(0, weight=1, uniform="main")
+        body.columnconfigure(2, weight=1, uniform="main")
+        body.rowconfigure(0, weight=1)
+        left = ttk.Frame(body)
+        left.grid(row=0, column=0, sticky="nsew", padx=(0, 10))
+        left.columnconfigure(0, weight=1)
+        left.rowconfigure(22, weight=1)
+        ttk.Separator(body, orient="vertical").grid(row=0, column=1, sticky="ns")
+        settings = ttk.Frame(body)
+        settings.grid(row=0, column=2, sticky="nsew", padx=(10, 0))
+        canvas = tk.Canvas(settings, highlightthickness=0, width=650)
         style_surface(canvas)
-        body_scroll = ttk.Scrollbar(body, orient="vertical", command=canvas.yview)
+        body_scroll = ttk.Scrollbar(settings, orient="vertical", command=canvas.yview)
         canvas.configure(yscrollcommand=body_scroll.set)
         body_scroll.pack(side="right", fill="y")
         canvas.pack(side="left", fill="both", expand=True)
@@ -239,8 +248,8 @@ class App(_BaseTk):
         frame.columnconfigure(1, weight=1)  # 1번 열(입력창들)이 전부 같은 너비로 맞춰지도록
 
         # ---- 실시간 파일명 미리보기 (맨 위, 옵션 바꿀 때마다 자동 갱신) ----
-        preview_box = ttk.Frame(frame, relief="groove", borderwidth=2)
-        preview_box.grid(row=0, column=0, columnspan=3, sticky="we", padx=10, pady=(14, 10))
+        preview_box = ttk.Frame(left, relief="groove", borderwidth=2)
+        preview_box.grid(row=0, column=0, sticky="we", padx=10, pady=(0, 10))
         preview_box.columnconfigure(1, weight=1)
 
         ttk.Label(preview_box, text="파일명 미리보기 (예시)").grid(
@@ -401,8 +410,8 @@ class App(_BaseTk):
 
         drop_hint = "파일 선택 (여러 개 가능) — 또는 아래 목록에 파일을 직접 드래그해서 놓아도 됩니다" \
             if DND_AVAILABLE else "파일 선택 (여러 개 가능)"
-        select_button = ttk.Button(frame, text=drop_hint, command=self.choose_files)
-        select_button.grid(row=16, column=0, columnspan=2, sticky="we", **pad)
+        select_button = ttk.Button(left, text=drop_hint, command=self.choose_files)
+        select_button.grid(row=16, column=0, sticky="we", **pad)
         ToolTip(select_button, "이름을 바꿀 소재 파일을 선택하세요. 여러 개를 한 번에 고를 수 있습니다.")
 
         for var in (
@@ -415,10 +424,10 @@ class App(_BaseTk):
             var.trace_add("write", self.update_preview)
         self.update_preview()
 
-        self.file_listbox = tk.Listbox(frame, height=10, width=70, selectmode=tk.EXTENDED)
+        self.file_listbox = tk.Listbox(left, height=10, width=70, selectmode=tk.EXTENDED)
         if self._listbox_colors:
             self.file_listbox.configure(**self._listbox_colors)
-        self.file_listbox.grid(row=17, column=0, columnspan=3, sticky="we", **pad)
+        self.file_listbox.grid(row=17, column=0, sticky="we", **pad)
         self.file_listbox.bind("<Delete>", lambda event: self.remove_selected_files())
         self.file_listbox.bind("<BackSpace>", lambda event: self.remove_selected_files())
         ToolTip(self.file_listbox, "선택된 파일 목록입니다. 클릭 후 Delete 키로 삭제할 수 있습니다.")
@@ -427,48 +436,59 @@ class App(_BaseTk):
             self.file_listbox.drop_target_register(DND_FILES)
             self.file_listbox.dnd_bind("<<Drop>>", self.on_drop)
             hint = "위 목록에 파일을 마우스로 끌어다 놓으면 바로 추가됩니다. (목록 클릭 후 Delete 키로도 삭제 가능)"
-            ttk.Label(frame, text=hint, foreground="gray", wraplength=520).grid(
-                row=18, column=0, columnspan=3, sticky="w", padx=10
+            ttk.Label(left, text=hint, foreground="gray", wraplength=520).grid(
+                row=18, column=0, sticky="w", padx=10
             )
         else:
             hint = ("드래그앤드롭을 쓰려면 터미널에서 'pip install tkinterdnd2' 실행 후 프로그램을 다시 켜주세요. "
                     "(설치 안 해도 '파일 선택' 버튼으로 정상 사용 가능합니다. 목록 클릭 후 Delete 키로 삭제 가능)")
-            ttk.Label(frame, text=hint, foreground="gray", wraplength=520).grid(
-                row=18, column=0, columnspan=3, sticky="w", padx=10
+            ttk.Label(left, text=hint, foreground="gray", wraplength=520).grid(
+                row=18, column=0, sticky="w", padx=10
             )
 
-        list_button_frame = ttk.Frame(frame)
-        list_button_frame.grid(row=19, column=0, columnspan=3, sticky="we", padx=10, pady=6)
+        list_button_frame = ttk.Frame(left)
+        list_button_frame.grid(row=19, column=0, sticky="we", padx=10, pady=6)
         remove_button = ttk.Button(list_button_frame, text="선택 항목 삭제", command=self.remove_selected_files)
-        remove_button.pack(side="left", padx=(0, 5))
+        remove_button.pack(side="right", padx=(0, 5))
         ToolTip(remove_button, "목록에서 클릭(또는 Ctrl/Shift로 여러 개 선택)한 파일만 목록에서 제거합니다.")
         clear_button = ttk.Button(list_button_frame, text="전체 비우기", command=self.clear_all_files)
-        clear_button.pack(side="left", padx=5)
+        clear_button.pack(side="right", padx=5)
         ToolTip(clear_button, "목록에 담긴 파일을 전부 비웁니다. (실제 파일은 삭제되지 않습니다)")
 
-        run_button = ttk.Button(frame, text="실행: 전체 Preview 확인 후 파일 처리", command=self.run_process)
-        run_button.grid(row=20, column=0, columnspan=3, sticky="we", **pad)
+        run_button = ttk.Button(left, text="확인 후 실행", command=self.run_process)
+        run_button.grid(row=20, column=0, sticky="we", **pad)
         ToolTip(run_button, "위에서 설정한 옵션대로 파일 이름을 바꿔 지정한 폴더에 복사본으로 저장합니다.")
 
         self.status_var = tk.StringVar(value="대기 중")
-        ttk.Label(frame, textvariable=self.status_var, foreground=IMAGE_ACCENT).grid(row=21, column=0, columnspan=3, sticky="w", **pad)
+        ttk.Label(left, textvariable=self.status_var, foreground=IMAGE_ACCENT).grid(row=21, column=0, sticky="w", **pad)
 
-        preview_frame = ttk.LabelFrame(frame, text="선택 파일 Preview · 소재 세트")
-        preview_frame.grid(row=22, column=0, columnspan=3, sticky="nsew", padx=10, pady=6)
-        self.actual_preview = tk.Text(preview_frame, height=8, width=70, wrap="word")
+        panel_style = ttk.Style(self)
+        panel_style.configure("Preview.TLabelframe", borderwidth=1, relief="solid",
+                              bordercolor=panel_style.lookup("TEntry", "bordercolor") or
+                              panel_style.lookup("TButton", "background"))
+        preview_frame = ttk.LabelFrame(left, text="선택 파일 Preview · 소재 세트", style="Preview.TLabelframe")
+        preview_frame.grid(row=22, column=0, sticky="nsew", padx=10, pady=6)
+        preview_frame.columnconfigure(0, weight=1)
+        preview_frame.rowconfigure(1, weight=1)
+        self.preview_alert = ttk.Label(preview_frame, foreground=WARNING_COLOR,
+                                       justify="left", wraplength=600, padding=(8, 6))
+        self.preview_alert.grid(row=0, column=0, columnspan=2, sticky="we")
+        self.preview_alert.grid_remove()
+        preview_frame.bind("<Configure>", lambda e: self.preview_alert.configure(wraplength=max(120, e.width - 24)))
+        self.actual_preview = tk.Text(preview_frame, height=10, width=1, wrap="word")
         style_text(self.actual_preview)
         scroll = ttk.Scrollbar(preview_frame, command=self.actual_preview.yview)
         self.actual_preview.configure(yscrollcommand=scroll.set)
-        scroll.pack(side="right", fill="y")
-        self.actual_preview.pack(fill="both", expand=True)
+        scroll.grid(row=1, column=1, sticky="ns")
+        self.actual_preview.grid(row=1, column=0, sticky="nsew")
         self.actual_preview.configure(state="disabled")
 
         # ---- 창 크기를 위젯이 실제로 필요로 하는 크기에 맞춰 자동으로 잡음 (잘림 방지) ----
         self.update_idletasks()
-        req_width = min(max(frame.winfo_reqwidth() + 50, 760), self.winfo_screenwidth() - 80)   # 여유 여백
+        req_width = min(1480, self.winfo_screenwidth() - 80)   # 여유 여백
         req_height = min(frame.winfo_reqheight() + header.winfo_reqheight() + 60, self.winfo_screenheight() - 80)
         self.geometry(f"{req_width}x{req_height}")
-        self.minsize(min(req_width, 700), min(req_height, 500))
+        self.minsize(min(req_width, 1050), min(req_height, 620))
 
         # ---- Windows 타이틀바(상단 제목표시줄)도 다크로 (Windows 10 1809+/11 전용, 그 외 OS는 무시됨) ----
         self._apply_windows_dark_titlebar()
@@ -616,12 +636,22 @@ class App(_BaseTk):
             return
         try:
             plan = build_plan(tuple(self.selected_files), self.current_options(), CONFIG)
-            text = describe_plan(plan)
+            from dataclasses import replace
+            text = describe_plan(replace(plan, warnings=[], errors=[]))
+            alerts = (["실행 차단 (수정 필요)"] + plan.errors if plan.errors else [])
+            if plan.warnings:
+                alerts += [f"경고 {len(plan.warnings)}건 (확인 후 진행 가능)"] + plan.warnings
             notice = (f"실행 차단 {len(plan.errors)}건" if plan.errors else
                       f"경고 {len(plan.warnings)}건 발견" if plan.warnings else "Preview 갱신 완료")
         except Exception as exc:
             text = f"Preview 분석 실패: {exc}"
             notice = "Preview 분석 실패"
+            alerts = [text]
+        self.preview_alert.configure(text="\n".join(alerts))
+        if alerts:
+            self.preview_alert.grid()
+        else:
+            self.preview_alert.grid_remove()
         fill_preview(self.actual_preview, text)
         self.show_toast(notice)
 
@@ -647,59 +677,25 @@ class App(_BaseTk):
         except Exception as exc:
             messagebox.showerror("Preview 오류", str(exc))
             return
-        dialog = tk.Toplevel(self)
-        style_surface(dialog)
-        dialog.title("전체 결과 Preview — 확인 전에는 파일을 변경하지 않습니다")
-        dialog.geometry("850x600")
-        dialog.transient(self)
-        text_frame = ttk.Frame(dialog)
-        text_frame.pack(fill="both", expand=True, padx=10, pady=10)
-        text = tk.Text(text_frame, wrap="word")
-        style_text(text)
-        scroll = ttk.Scrollbar(text_frame, command=text.yview)
-        text.configure(yscrollcommand=scroll.set)
-        scroll.pack(side="right", fill="y")
-        text.pack(fill="both", expand=True)
-        fill_preview(text, describe_plan(plan))
-        buttons = ttk.Frame(dialog)
-        buttons.pack(fill="x", padx=10, pady=10)
-
-        def confirm():
-            if not confirm_execution(dialog, plan):
-                return
-            dialog.destroy()
-            try:
-                results, errors = execute_plan(plan)
-            except Exception as exc:
-                messagebox.showerror("실행 차단", str(exc))
-                self.refresh_actual_preview()
-                return
-            self.status_var.set(f"완료: {len(results)}개 / 실패: {len(errors)}개")
-            detail = "저장 결과:\n" + "\n".join(results)
-            if errors:
-                detail += "\n\n실패:\n" + "\n".join(errors)
-            messagebox.showinfo("처리 결과", detail)
+        # All details stay in the main Preview; only one summary modal precedes execution.
+        self.refresh_actual_preview()
+        if plan.errors:
+            self.status_var.set("실행 차단: Preview 상단의 오류를 수정해주세요.")
+            return
+        if not confirm_execution(self, plan):
+            return
+        try:
+            results, errors = execute_plan(plan)
+        except Exception as exc:
+            messagebox.showerror("실행 차단", str(exc))
             self.refresh_actual_preview()
-
-        cancel_button = ttk.Button(buttons, text="취소", command=dialog.destroy)
-        cancel_button.pack(side="right")
-        execute_button = ttk.Button(buttons, text="확인 후 실행", command=confirm,
-                                   state="disabled" if plan.errors else "normal")
-        execute_button.pack(side="right", padx=8)
-        text.bind("<Tab>", lambda e: (e.widget.tk_focusNext().focus_set(), "break")[1])
-        text.bind("<Shift-Tab>", lambda e: (e.widget.tk_focusPrev().focus_set(), "break")[1])
-        dialog.bind("<Escape>", lambda e: (dialog.destroy(), "break")[1])
-        def preview_enter(event):
-            if dialog.focus_get() == execute_button and not plan.errors:
-                confirm()
-            elif dialog.focus_get() == cancel_button:
-                dialog.destroy()
-            return "break"
-        dialog.bind("<Return>", preview_enter)
-        dialog.bind("<KP_Enter>", preview_enter)
-        dialog.wait_visibility()
-        dialog.grab_set()
-        cancel_button.focus_set()
+            return
+        self.status_var.set(f"완료: {len(results)}개 / 실패: {len(errors)}개")
+        detail = "저장 결과:\n" + "\n".join(results)
+        if errors:
+            detail += "\n\n실패:\n" + "\n".join(errors)
+        messagebox.showinfo("처리 결과", detail)
+        self.refresh_actual_preview()
 
 
 if __name__ == "__main__":
