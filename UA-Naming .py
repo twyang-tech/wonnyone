@@ -78,6 +78,7 @@ from ua_naming.naming import (
 from ua_naming.media import VIDEO_EXTENSIONS
 from ua_naming.planning import Options, build_plan, execute_plan, describe_plan
 from ua_naming.theme import IMAGE_ACCENT, VIDEO_ACCENT, WARNING_COLOR, style_surface, style_text, fill_preview
+from ua_naming.layout import SingleLineLabel, action_slot, center_initial_window
 from ua_naming.dialogs import confirm_execution
 from ua_naming.settings import load_config
 
@@ -235,6 +236,10 @@ class App(_BaseTk):
         ttk.Separator(body, orient="vertical").grid(row=0, column=1, sticky="ns")
         settings = ttk.Frame(body)
         settings.grid(row=0, column=2, sticky="nsew", padx=(10, 0))
+        run_button = ttk.Button(settings, text="확인 후 실행", command=self.run_process)
+        run_button.pack(side="bottom", fill="x", padx=10, pady=(12, 6))
+        ToolTip(run_button, "위에서 설정한 옵션대로 파일 이름을 바꿔 지정한 폴더에 복사본으로 저장합니다.")
+
         canvas = tk.Canvas(settings, highlightthickness=0, width=650)
         style_surface(canvas)
         body_scroll = ttk.Scrollbar(settings, orient="vertical", command=canvas.yview)
@@ -283,10 +288,10 @@ class App(_BaseTk):
         feature_entry.grid(row=2, column=1, sticky="we", **pad)
         ToolTip(feature_entry, "파일명에 들어갈 소재 특징을 입력하세요. 예: STICKER, 엔드카드, 뮤직박스 등")
         self.cta_var = tk.BooleanVar(value=False)
-        cta_box = ttk.Frame(frame, relief="groove", borderwidth=2)
-        cta_box.grid(row=2, column=2, **pad)
+        cta_box = action_slot(frame, 3)
         cta_check = ttk.Checkbutton(cta_box, text="+CTA", variable=self.cta_var)
-        cta_check.pack(padx=6, pady=3)
+        cta_check.configure(padding=(6, 3))
+        cta_check.pack(fill="both", expand=True)
         ToolTip(cta_check, "체크하면 소재특징 뒤에 '+CTA'가 자동으로 붙습니다. 예: STICKER → STICKER+CTA")
 
         ttk.Label(frame, text="국가명").grid(row=3, column=0, sticky="w", **pad)
@@ -300,8 +305,8 @@ class App(_BaseTk):
         self.out_entry = ttk.Entry(frame, textvariable=self.output_folder_var)
         self.out_entry.grid(row=4, column=1, sticky="we", **pad)
         ToolTip(self.out_entry, "이름이 바뀐 파일 복사본이 저장될 폴더입니다. 원본 파일은 그대로 남습니다.")
-        self.folder_button = ttk.Button(frame, text="폴더 변경", command=self.choose_output_folder)
-        self.folder_button.grid(row=4, column=2, **pad)
+        self.folder_button = ttk.Button(action_slot(frame, 4), text="폴더 변경", padding=(6, 3), command=self.choose_output_folder)
+        self.folder_button.pack(fill="both", expand=True)
         ToolTip(self.folder_button, "저장 폴더를 다른 곳으로 바꾸고 싶을 때 클릭하세요.")
 
         ttk.Label(frame, text="제작완료날짜 (yymmdd)").grid(row=5, column=0, sticky="w", **pad)
@@ -310,10 +315,10 @@ class App(_BaseTk):
         date_entry.grid(row=5, column=1, sticky="we", **pad)
         ToolTip(date_entry, "기본값은 오늘 날짜예요. 다른 날짜를 쓰고 싶으면 yymmdd 형식(예: 260729)으로 직접 수정하세요.")
         today_button = ttk.Button(
-            frame, text="오늘 날짜로",
+            action_slot(frame, 5), text="오늘 날짜로", padding=(6, 3),
             command=lambda: self.date_var.set(datetime.now().strftime("%y%m%d"))
         )
-        today_button.grid(row=5, column=2, **pad)
+        today_button.pack(fill="both", expand=True)
         ToolTip(today_button, "날짜를 다시 오늘 날짜로 되돌립니다.")
 
         self.include_duration_var = tk.BooleanVar(value=False)
@@ -332,10 +337,10 @@ class App(_BaseTk):
         )
         self.aspect_ratio_combo.grid(row=7, column=1, sticky="we", **pad)
         ToolTip(self.aspect_ratio_combo, "픽셀 해상도 대신 비율로 표시하고 싶을 때 선택하세요. 영상 파일에만 적용되고 이미지에는 영향 없습니다.")
-        ttk.Label(
+        SingleLineLabel(
             frame, text="픽셀 단위가 아닌, 비율로 표시가 필요한 경우 사용 (영상 파일에만 적용, 이미지는 영향 없음)",
-            foreground="gray", wraplength=520
-        ).grid(row=8, column=0, columnspan=3, sticky="w", padx=10)
+            foreground="gray"
+        ).grid(row=8, column=0, columnspan=3, sticky="we", padx=10, pady=(2, 6))
 
         ttk.Label(frame, text="이미지 출력 포맷 (선택)").grid(row=9, column=0, sticky="w", **pad)
         self.image_output_format_var = tk.StringVar(value=IMAGE_OUTPUT_FORMATS[0])
@@ -357,11 +362,11 @@ class App(_BaseTk):
             self.compression_level_combo,
             "가로/세로 크기와 비율은 그대로 두고, 색상 정보만 줄여서 파일 용량을 줄입니다. 영상 파일에는 적용되지 않습니다."
         )
-        ttk.Label(
+        SingleLineLabel(
             frame,
             text="해상도·비율은 바뀌지 않고, 색상 정보만 줄여 용량을 줄입니다 (이미지 파일에만 적용, 영상은 영향 없음)",
-            foreground="gray", wraplength=520
-        ).grid(row=11, column=0, columnspan=3, sticky="w", padx=10)
+            foreground="gray"
+        ).grid(row=11, column=0, columnspan=3, sticky="we", padx=10, pady=(2, 6))
 
         self.keep_original_name_var = tk.BooleanVar(value=False)
         keep_name_check = ttk.Checkbutton(
@@ -402,11 +407,11 @@ class App(_BaseTk):
         replace_entry = ttk.Entry(find_replace_frame, textvariable=self.replace_text_var, width=14)
         replace_entry.pack(side="left")
         ToolTip(replace_entry, "위에서 찾은 문자열을 이 문자열로 바꿉니다. 비워두면 그냥 삭제(공백으로 치환)됩니다.")
-        ttk.Label(
+        SingleLineLabel(
             frame,
             text="파일명(확장자 제외)에서 찾을 문자열을 다른 문자열로 바꿉니다. 예: 공백 → _  (비워두면 적용 안 함)",
-            foreground="gray", wraplength=520
-        ).grid(row=15, column=0, columnspan=3, sticky="w", padx=10)
+            foreground="gray"
+        ).grid(row=15, column=0, columnspan=3, sticky="we", padx=10, pady=(2, 6))
 
         drop_hint = "파일 선택 (여러 개 가능) — 또는 아래 목록에 파일을 직접 드래그해서 놓아도 됩니다" \
             if DND_AVAILABLE else "파일 선택 (여러 개 가능)"
@@ -455,26 +460,23 @@ class App(_BaseTk):
         clear_button.pack(side="right", padx=5)
         ToolTip(clear_button, "목록에 담긴 파일을 전부 비웁니다. (실제 파일은 삭제되지 않습니다)")
 
-        run_button = ttk.Button(left, text="확인 후 실행", command=self.run_process)
-        run_button.grid(row=20, column=0, sticky="we", **pad)
-        ToolTip(run_button, "위에서 설정한 옵션대로 파일 이름을 바꿔 지정한 폴더에 복사본으로 저장합니다.")
-
         self.status_var = tk.StringVar(value="대기 중")
-        ttk.Label(left, textvariable=self.status_var, foreground=IMAGE_ACCENT).grid(row=21, column=0, sticky="w", **pad)
+        preview_heading = ttk.Frame(left)
+        preview_heading.grid(row=21, column=0, sticky="we", padx=10, pady=(4, 2))
+        preview_heading.columnconfigure(0, weight=1)
+        ttk.Label(preview_heading, text="선택 파일 Preview · 소재 세트").grid(row=0, column=0, sticky="w")
+        ttk.Label(preview_heading, textvariable=self.status_var, foreground=IMAGE_ACCENT).grid(row=0, column=1, sticky="e")
 
         panel_style = ttk.Style(self)
         panel_style.configure("Preview.TLabelframe", borderwidth=1, relief="solid",
                               bordercolor=panel_style.lookup("TEntry", "bordercolor") or
                               panel_style.lookup("TButton", "background"))
-        preview_frame = ttk.LabelFrame(left, text="선택 파일 Preview · 소재 세트", style="Preview.TLabelframe")
+        preview_frame = ttk.LabelFrame(left, style="Preview.TLabelframe")
         preview_frame.grid(row=22, column=0, sticky="nsew", padx=10, pady=6)
         preview_frame.columnconfigure(0, weight=1)
         preview_frame.rowconfigure(1, weight=1)
-        self.preview_alert = ttk.Label(preview_frame, foreground=WARNING_COLOR,
-                                       justify="left", wraplength=600, padding=(8, 6))
+        self.preview_alert = SingleLineLabel(preview_frame, foreground=WARNING_COLOR, padding=(8, 6))
         self.preview_alert.grid(row=0, column=0, columnspan=2, sticky="we")
-        self.preview_alert.grid_remove()
-        preview_frame.bind("<Configure>", lambda e: self.preview_alert.configure(wraplength=max(120, e.width - 24)))
         self.actual_preview = tk.Text(preview_frame, height=10, width=1, wrap="word")
         style_text(self.actual_preview)
         scroll = ttk.Scrollbar(preview_frame, command=self.actual_preview.yview)
@@ -483,12 +485,7 @@ class App(_BaseTk):
         self.actual_preview.grid(row=1, column=0, sticky="nsew")
         self.actual_preview.configure(state="disabled")
 
-        # ---- 창 크기를 위젯이 실제로 필요로 하는 크기에 맞춰 자동으로 잡음 (잘림 방지) ----
-        self.update_idletasks()
-        req_width = min(1480, self.winfo_screenwidth() - 80)   # 여유 여백
-        req_height = min(frame.winfo_reqheight() + header.winfo_reqheight() + 60, self.winfo_screenheight() - 80)
-        self.geometry(f"{req_width}x{req_height}")
-        self.minsize(min(req_width, 1050), min(req_height, 620))
+        center_initial_window(self)
 
         # ---- Windows 타이틀바(상단 제목표시줄)도 다크로 (Windows 10 1809+/11 전용, 그 외 OS는 무시됨) ----
         self._apply_windows_dark_titlebar()
@@ -636,8 +633,7 @@ class App(_BaseTk):
             return
         try:
             plan = build_plan(tuple(self.selected_files), self.current_options(), CONFIG)
-            from dataclasses import replace
-            text = describe_plan(replace(plan, warnings=[], errors=[]))
+            text = describe_plan(plan)
             alerts = (["실행 차단 (수정 필요)"] + plan.errors if plan.errors else [])
             if plan.warnings:
                 alerts += [f"경고 {len(plan.warnings)}건 (확인 후 진행 가능)"] + plan.warnings
@@ -647,11 +643,8 @@ class App(_BaseTk):
             text = f"Preview 분석 실패: {exc}"
             notice = "Preview 분석 실패"
             alerts = [text]
-        self.preview_alert.configure(text="\n".join(alerts))
-        if alerts:
-            self.preview_alert.grid()
-        else:
-            self.preview_alert.grid_remove()
+        self.preview_alert.set_text(" / ".join(alerts) if alerts else "정상: 경고 없음")
+        self.preview_alert.configure(foreground=WARNING_COLOR if alerts else IMAGE_ACCENT)
         fill_preview(self.actual_preview, text)
         self.show_toast(notice)
 
