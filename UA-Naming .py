@@ -53,8 +53,6 @@ _BaseTk = TkinterDnD.Tk if DND_AVAILABLE else tk.Tk
 # ============== 사용자 설정 영역 ==============
 OUTPUT_FOLDER_DEFAULT = os.path.join(os.path.expanduser("~"), "Desktop", "UA_소재_완성")
 
-GAME_TITLES = ["FI", "ANC", "직접입력"]
-COUNTRIES = ["KO", "EN", "JA", "CHT", "CHS", "ES", "BR", "TH", "ID", "FR", "VN", "직접입력"]
 
 # 창 테마 (ttkbootstrap 설치되어 있으면 이 테마를 우선 사용, 다크 테마 목록: darkly, cyborg, superhero, solar, vapor)
 TTKBOOTSTRAP_THEME_NAME = "darkly"
@@ -73,165 +71,17 @@ LOGO_BASE64 = "iVBORw0KGgoAAAANSUhEUgAAAfQAAADhCAYAAAA+ukcWAAAACXBIWXMAAC4jAAAuI
 # ================================================
 
 
-def get_image_resolution(filepath):
-    try:
-        from PIL import Image
-        with Image.open(filepath) as img:
-            w, h = img.size
-            return f"{w}x{h}"
-    except Exception:
-        return None
+from ua_naming.naming import (
+    build_new_filename, sanitize, ASPECT_RATIO_NONE, ASPECT_RATIO_OPTIONS,
+    IMAGE_OUTPUT_FORMATS, COMPRESSION_LEVELS,
+)
+from ua_naming.media import VIDEO_EXTENSIONS
+from ua_naming.planning import Options, build_plan, execute_plan, describe_plan
+from ua_naming.settings import load_config
 
-
-def get_video_resolution(filepath):
-    try:
-        result = subprocess.run(
-            [
-                "ffprobe", "-v", "error", "-select_streams", "v:0",
-                "-show_entries", "stream=width,height",
-                "-of", "json", filepath
-            ],
-            capture_output=True, text=True, timeout=15
-        )
-        data = json.loads(result.stdout)
-        stream = data["streams"][0]
-        return f"{stream['width']}x{stream['height']}"
-    except Exception:
-        return None
-
-
-def get_video_duration_sec(filepath):
-    """영상 길이를 초 단위 정수로 반환. 실패 시 None."""
-    try:
-        result = subprocess.run(
-            [
-                "ffprobe", "-v", "error",
-                "-show_entries", "format=duration",
-                "-of", "json", filepath
-            ],
-            capture_output=True, text=True, timeout=15
-        )
-        data = json.loads(result.stdout)
-        duration = float(data["format"]["duration"])
-        return int(round(duration))
-    except Exception:
-        return None
-
-
-IMAGE_EXTENSIONS = {"jpg", "jpeg", "png", "gif", "bmp", "webp", "tiff"}
-VIDEO_EXTENSIONS = {"mp4", "mov", "avi", "webm", "mkv", "m4v", "wmv"}
-
-# 영상 파일에 한해 픽셀 해상도 대신 비율로 표시하고 싶을 때 쓰는 옵션
-ASPECT_RATIO_NONE = "사용 안 함 (픽셀 해상도 그대로)"
-ASPECT_RATIO_OPTIONS = [ASPECT_RATIO_NONE, "1x1", "16x9", "9x16", "4x3"]
-
-# 이미지 파일에 한해 확장자를 바꾸고 싶을 때 쓰는 옵션 (영상 파일에는 적용 안 함)
-IMAGE_OUTPUT_FORMATS = ["원본 유지", "JPG", "PNG", "WEBP"]
-
-# 이미지 파일에 한해 크기/비율은 그대로 두고 용량만 줄이고 싶을 때 쓰는 옵션 (영상 파일에는 적용 안 함)
-COMPRESSION_LEVELS = ["압축 안 함", "약한 압축", "강한 압축"]
-# JPG/WEBP는 quality 값으로, PNG는 색상 수(팔레트)를 줄여서 압축합니다.
-COMPRESSION_QUALITY_MAP = {"압축 안 함": 95, "약한 압축": 75, "강한 압축": 50}
-COMPRESSION_PNG_COLORS_MAP = {"압축 안 함": None, "약한 압축": 200, "강한 압축": 96}
-
-
-def get_resolution(filepath, ext):
-    ext_lower = ext.lower()
-    if ext_lower in IMAGE_EXTENSIONS:
-        res = get_image_resolution(filepath)
-    elif ext_lower in VIDEO_EXTENSIONS:
-        res = get_video_resolution(filepath)
-    else:
-        res = None
-    return res if res else "해상도미확인"
-
-
-def sanitize(text):
-    # 파일명에 쓸 수 없는 문자 제거, 공백은 그대로 두되 앞뒤 공백만 정리
-    text = text.strip()
-    return re.sub(r'[\\/:*?"<>|]', "", text)
-
-
-def build_new_filename(filepath, game_title, feature, country, date_str, include_duration=False,
-                        aspect_ratio=None, image_output_format=None):
-    base, ext = os.path.splitext(filepath)
-    ext_lower = ext.lstrip(".").lower()
-    is_video = ext_lower in VIDEO_EXTENSIONS
-
-    if is_video:
-        format_label = "VID"  # 영상 파일은 확장자 종류 상관없이 VID로 통일
-        final_ext = ext  # 영상은 확장자/포맷 변경을 지원하지 않음
-    else:
-        if image_output_format and image_output_format != "원본 유지":
-            final_ext = "." + image_output_format.lower()
-            format_label = image_output_format.upper()
-        else:
-            final_ext = ext
-            format_label = ext.lstrip(".").upper()  # 이미지 등은 실제 확장자 그대로 (예: PNG, JPG)
-
-    # 영상 파일이고 비율 옵션이 선택되어 있으면, 픽셀 해상도 대신 비율 텍스트 사용 (이미지에는 적용 안 함)
-    if is_video and aspect_ratio and aspect_ratio != ASPECT_RATIO_NONE:
-        resolution = aspect_ratio
-    else:
-        resolution = get_resolution(filepath, ext.lstrip("."))
-
-    duration_part = ""
-    if include_duration and is_video:
-        duration_sec = get_video_duration_sec(filepath)
-        duration_label = f"{duration_sec}sec" if duration_sec is not None else "길이미확인"
-        duration_part = f"_{duration_label}"
-
-    new_name = (
-        f"{format_label}_{sanitize(game_title)}_{sanitize(feature)}_{sanitize(country)}"
-        f"_{resolution}{duration_part}_{date_str}{final_ext}"
-    )
-    return new_name, format_label, resolution, is_video
-
-
-def save_image_with_options(src_path, dest_path, image_output_format, compression_level):
-    """이미지 파일을 지정한 포맷/압축 옵션으로 저장.
-    포맷 변경도 없고 압축도 '압축 안 함'이면 원본을 그대로 복사(빠르고 화질 손실 없음).
-    가로/세로 크기와 비율은 절대 바꾸지 않고, 색상 정보(품질/팔레트)만 조절합니다.
-    src_path와 dest_path가 같은 파일이어도(원본 덮어쓰기) 안전하게 동작합니다."""
-    no_format_change = (not image_output_format) or (image_output_format == "원본 유지")
-    no_compression = (not compression_level) or (compression_level == "압축 안 함")
-
-    if no_format_change and no_compression:
-        if os.path.abspath(src_path) == os.path.abspath(dest_path):
-            return  # 바꿀 내용이 없고 자기 자신이면 아무 작업도 필요 없음
-        shutil.copy2(src_path, dest_path)
-        return
-
-    from PIL import Image
-    quality = COMPRESSION_QUALITY_MAP.get(compression_level, 95)
-    png_colors = COMPRESSION_PNG_COLORS_MAP.get(compression_level)
-
-    target_ext = os.path.splitext(dest_path)[1].lstrip(".").lower()
-
-    # 원본 파일을 통째로 메모리에 읽어들인 뒤 여는 방식 -> src와 dest가 같은 경로여도(덮어쓰기) 안전함
-    with open(src_path, "rb") as f:
-        src_bytes = f.read()
-    img = Image.open(io.BytesIO(src_bytes))
-    img.load()
-
-    if target_ext in ("jpg", "jpeg"):
-        img = img.convert("RGB")  # JPEG는 투명도(알파) 지원 안 함
-        img.save(dest_path, "JPEG", quality=quality, optimize=True)
-    elif target_ext == "webp":
-        img.save(dest_path, "WEBP", quality=quality)
-    elif target_ext == "png":
-        if png_colors:
-            has_alpha = img.mode in ("RGBA", "LA") or (img.mode == "P" and "transparency" in img.info)
-            base_img = img.convert("RGBA") if has_alpha else img.convert("RGB")
-            quantized = base_img.convert(
-                "P", palette=Image.ADAPTIVE, colors=png_colors
-            )
-            quantized.save(dest_path, "PNG", optimize=True)
-        else:
-            img.save(dest_path, "PNG", optimize=True)
-    else:
-        # 그 외 포맷(gif, bmp 등)은 그대로 복사
-        shutil.copy2(src_path, dest_path)
+CONFIG = load_config()
+GAME_TITLES = CONFIG["games"] + ["직접입력"]
+COUNTRIES = CONFIG["languages"] + ["직접입력"]
 
 
 class ToolTip:
@@ -289,6 +139,7 @@ class App(_BaseTk):
         super().__init__()
         self.title("UA 소재 자동 네이밍 도구")
         self.selected_files = []
+        self._preview_job = None
 
         # ---- 테마 적용 ----
         # ttkbootstrap이 설치되어 있으면 다크 테마(TTKBOOTSTRAP_THEME_NAME) 적용,
@@ -370,8 +221,18 @@ class App(_BaseTk):
 
         pad = {"padx": 10, "pady": 6}
 
-        frame = ttk.Frame(self)
-        frame.pack(fill="both", expand=True, padx=10, pady=10)
+        # Keep the existing vertical layout usable on smaller Windows screens.
+        body = ttk.Frame(self)
+        body.pack(fill="both", expand=True, padx=10, pady=10)
+        canvas = tk.Canvas(body, highlightthickness=0)
+        body_scroll = ttk.Scrollbar(body, orient="vertical", command=canvas.yview)
+        canvas.configure(yscrollcommand=body_scroll.set)
+        body_scroll.pack(side="right", fill="y")
+        canvas.pack(side="left", fill="both", expand=True)
+        frame = ttk.Frame(canvas)
+        frame_window = canvas.create_window((0, 0), window=frame, anchor="nw")
+        frame.bind("<Configure>", lambda event: canvas.configure(scrollregion=canvas.bbox("all")))
+        canvas.bind("<Configure>", lambda event: canvas.itemconfigure(frame_window, width=event.width))
         frame.columnconfigure(1, weight=1)  # 1번 열(입력창들)이 전부 같은 너비로 맞춰지도록
 
         # ---- 실시간 파일명 미리보기 (맨 위, 옵션 바꿀 때마다 자동 갱신) ----
@@ -545,7 +406,8 @@ class App(_BaseTk):
             self.game_title_var, self.feature_var, self.cta_var,
             self.country_var, self.date_var, self.include_duration_var, self.aspect_ratio_var,
             self.image_output_format_var, self.keep_original_name_var,
-            self.find_text_var, self.replace_text_var,
+            self.find_text_var, self.replace_text_var, self.output_folder_var,
+            self.overwrite_original_var, self.compression_level_var,
         ):
             var.trace_add("write", self.update_preview)
         self.update_preview()
@@ -581,19 +443,28 @@ class App(_BaseTk):
         clear_button.pack(side="left", padx=5)
         ToolTip(clear_button, "목록에 담긴 파일을 전부 비웁니다. (실제 파일은 삭제되지 않습니다)")
 
-        run_button = ttk.Button(frame, text="실행: 파일 이름 변경", command=self.run_process)
+        run_button = ttk.Button(frame, text="실행: 전체 Preview 확인 후 파일 처리", command=self.run_process)
         run_button.grid(row=20, column=0, columnspan=3, sticky="we", **pad)
         ToolTip(run_button, "위에서 설정한 옵션대로 파일 이름을 바꿔 지정한 폴더에 복사본으로 저장합니다.")
 
         self.status_var = tk.StringVar(value="대기 중")
         ttk.Label(frame, textvariable=self.status_var, foreground="#FFBB18").grid(row=21, column=0, columnspan=3, sticky="w", **pad)
 
+        preview_frame = ttk.LabelFrame(frame, text="선택 파일 Preview · 소재 세트")
+        preview_frame.grid(row=22, column=0, columnspan=3, sticky="nsew", padx=10, pady=6)
+        self.actual_preview = tk.Text(preview_frame, height=8, width=70, wrap="word")
+        scroll = ttk.Scrollbar(preview_frame, command=self.actual_preview.yview)
+        self.actual_preview.configure(yscrollcommand=scroll.set)
+        scroll.pack(side="right", fill="y")
+        self.actual_preview.pack(fill="both", expand=True)
+        self.actual_preview.configure(state="disabled")
+
         # ---- 창 크기를 위젯이 실제로 필요로 하는 크기에 맞춰 자동으로 잡음 (잘림 방지) ----
         self.update_idletasks()
-        req_width = self.winfo_reqwidth() + 20   # 여유 여백
-        req_height = self.winfo_reqheight() + 20
+        req_width = min(max(frame.winfo_reqwidth() + 50, 760), self.winfo_screenwidth() - 80)   # 여유 여백
+        req_height = min(frame.winfo_reqheight() + header.winfo_reqheight() + 60, self.winfo_screenheight() - 80)
         self.geometry(f"{req_width}x{req_height}")
-        self.minsize(req_width, req_height)
+        self.minsize(min(req_width, 700), min(req_height, 500))
 
         # ---- Windows 타이틀바(상단 제목표시줄)도 다크로 (Windows 10 1809+/11 전용, 그 외 OS는 무시됨) ----
         self._apply_windows_dark_titlebar()
@@ -618,6 +489,7 @@ class App(_BaseTk):
             pass  # 다크 타이틀바 적용 실패해도 프로그램은 정상 동작
 
     def update_preview(self, *args):
+        self.schedule_file_preview()
         find_text = self.find_text_var.get()
         replace_text = self.replace_text_var.get()
 
@@ -696,6 +568,7 @@ class App(_BaseTk):
             self.refresh_file_listbox()
 
     def refresh_file_listbox(self):
+        self.schedule_file_preview()
         self.file_listbox.delete(0, tk.END)
         for f in self.selected_files:
             self.file_listbox.insert(tk.END, os.path.basename(f))
@@ -716,124 +589,86 @@ class App(_BaseTk):
             self.selected_files = []
             self.refresh_file_listbox()
 
-    def run_process(self):
-        keep_original_name = self.keep_original_name_var.get()
+    def current_options(self):
+        return Options(
+            game=self.game_title_var.get().strip(), feature=self.feature_var.get().strip(),
+            language=self.country_var.get().strip(), date=self.date_var.get().strip(),
+            cta=self.cta_var.get(), duration=self.include_duration_var.get(),
+            aspect=self.aspect_ratio_var.get(), output_format=self.image_output_format_var.get(),
+            compression=self.compression_level_var.get(), keep_name=self.keep_original_name_var.get(),
+            overwrite=self.overwrite_original_var.get(), output_dir=self.output_folder_var.get().strip(),
+            find=self.find_text_var.get(), replace=self.replace_text_var.get())
 
-        game_title = self.game_title_var.get().strip()
-        feature = self.feature_var.get().strip()
-        country = self.country_var.get().strip()
-        date_input = self.date_var.get().strip()
-
-        if not keep_original_name:
-            if game_title == "직접입력" or not game_title:
-                messagebox.showwarning("입력 필요", "게임 타이틀명을 입력해주세요.")
-                return
-            if not feature:
-                messagebox.showwarning("입력 필요", "소재특징을 입력해주세요.")
-                return
-            if country == "직접입력" or not country:
-                messagebox.showwarning("입력 필요", "국가명을 입력해주세요.")
-                return
-            if not re.fullmatch(r"\d{6}", date_input):
-                messagebox.showwarning(
-                    "입력 필요",
-                    "제작완료날짜는 yymmdd 형식의 숫자 6자리로 입력해주세요.\n예: 260729\n\n"
-                    "'오늘 날짜로' 버튼을 눌러 초기화할 수도 있습니다."
-                )
-                return
-        if not self.selected_files:
-            messagebox.showwarning("입력 필요", "파일을 선택해주세요.")
+    def schedule_file_preview(self):
+        if not hasattr(self, "find_text_var"):
             return
+        if self._preview_job:
+            self.after_cancel(self._preview_job)
+        self._preview_job = self.after(350, self.refresh_actual_preview)
 
-        overwrite_original = self.overwrite_original_var.get()
-        if overwrite_original:
-            confirm = messagebox.askyesno(
-                "원본 덮어쓰기 확인",
-                "'원본 파일에 덮어쓰기'가 켜져 있습니다.\n\n"
-                "복사본을 만들지 않고 원본 파일이 있던 위치에 바로 결과물을 저장하며,\n"
-                "이름이 바뀌는 경우 원래 파일은 삭제됩니다.\n\n"
-                "이 작업은 되돌릴 수 없습니다. 계속할까요?"
-            )
-            if not confirm:
+    def refresh_actual_preview(self):
+        self._preview_job = None
+        if not hasattr(self, "actual_preview"):
+            return
+        try:
+            plan = build_plan(tuple(self.selected_files), self.current_options(), CONFIG)
+            text = describe_plan(plan)
+        except Exception as exc:
+            text = f"Preview 분석 실패: {exc}"
+        self.actual_preview.configure(state="normal")
+        self.actual_preview.delete("1.0", tk.END)
+        self.actual_preview.insert("1.0", text)
+        self.actual_preview.configure(state="disabled")
+
+    def run_process(self):
+        try:
+            plan = build_plan(tuple(self.selected_files), self.current_options(), CONFIG)
+        except Exception as exc:
+            messagebox.showerror("Preview 오류", str(exc))
+            return
+        dialog = tk.Toplevel(self)
+        dialog.title("전체 결과 Preview — 확인 전에는 파일을 변경하지 않습니다")
+        dialog.geometry("850x600")
+        dialog.transient(self)
+        text_frame = ttk.Frame(dialog)
+        text_frame.pack(fill="both", expand=True, padx=10, pady=10)
+        text = tk.Text(text_frame, wrap="word")
+        scroll = ttk.Scrollbar(text_frame, command=text.yview)
+        text.configure(yscrollcommand=scroll.set)
+        scroll.pack(side="right", fill="y")
+        text.pack(fill="both", expand=True)
+        text.insert("1.0", describe_plan(plan))
+        text.configure(state="disabled")
+        buttons = ttk.Frame(dialog)
+        buttons.pack(fill="x", padx=10, pady=10)
+        accepted = tk.BooleanVar(value=False)
+        ttk.Checkbutton(buttons, text="전체 결과와 경고를 확인했습니다", variable=accepted).pack(anchor="w")
+
+        def confirm():
+            if not accepted.get():
+                messagebox.showwarning("확인 필요", "전체 결과와 경고를 확인한 뒤 체크해주세요.", parent=dialog)
                 return
-
-        output_folder = self.output_folder_var.get().strip()
-        if not overwrite_original:
-            os.makedirs(output_folder, exist_ok=True)
-
-        date_str = date_input  # yymmdd 형식 (하이픈 없음, 위에서 검증 완료)
-        include_duration = self.include_duration_var.get()
-        aspect_ratio = self.aspect_ratio_var.get()
-        image_output_format = self.image_output_format_var.get()
-        compression_level = self.compression_level_var.get()
-        feature_for_filename = feature + "+CTA" if self.cta_var.get() else feature
-        find_text = self.find_text_var.get()
-        replace_text = self.replace_text_var.get()
-        result_names = []
-        error_messages = []
-
-        for filepath in self.selected_files:
-            src_ext_lower = os.path.splitext(filepath)[1].lstrip(".").lower()
-            is_video = src_ext_lower in VIDEO_EXTENSIONS
-
-            if keep_original_name:
-                # 파일명은 원본 그대로 유지. 단, 이미지이고 출력 포맷을 바꿨다면 확장자만 그에 맞게 교체
-                original_base, original_ext = os.path.splitext(os.path.basename(filepath))
-                if (not is_video) and image_output_format and image_output_format != "원본 유지":
-                    new_ext = "." + image_output_format.lower()
-                else:
-                    new_ext = original_ext
-                new_name = original_base + new_ext
-            else:
-                new_name, ext_clean, resolution, is_video = build_new_filename(
-                    filepath, game_title, feature_for_filename, country, date_str,
-                    include_duration, aspect_ratio, image_output_format
-                )
-
-            if find_text:
-                name_part, ext_part = os.path.splitext(new_name)
-                name_part = name_part.replace(find_text, replace_text)
-                new_name = name_part + ext_part
-
-            dest_dir = os.path.dirname(filepath) if overwrite_original else output_folder
-            dest_path = os.path.join(dest_dir, new_name)
-            is_same_file = os.path.abspath(dest_path) == os.path.abspath(filepath)
-
-            # 파일명 중복 방지 (자기 자신에 저장하는 경우는 그대로 두고, 다른 기존 파일과 겹칠 때만 회피)
-            if not is_same_file:
-                counter = 1
-                base_name, ext = os.path.splitext(new_name)
-                while os.path.exists(dest_path):
-                    dest_path = os.path.join(dest_dir, f"{base_name}_{counter}{ext}")
-                    counter += 1
-                    is_same_file = os.path.abspath(dest_path) == os.path.abspath(filepath)
-
+            if plan.options.overwrite and not messagebox.askyesno(
+                    "원본 변경 확인", "원본 위치 처리입니다. 이름이 바뀌면 원본이 제거됩니다. 계속할까요?", parent=dialog):
+                return
+            dialog.destroy()
             try:
-                if is_video:
-                    if is_same_file:
-                        pass  # 이미 그 자리에 있으므로 아무 작업 불필요
-                    elif overwrite_original:
-                        shutil.move(filepath, dest_path)  # 이름이 바뀌는 이동(원본은 남지 않음)
-                    else:
-                        shutil.copy2(filepath, dest_path)  # 저장 폴더에 복사본 생성 (원본 유지)
-                else:
-                    save_image_with_options(filepath, dest_path, image_output_format, compression_level)
-                    if overwrite_original and not is_same_file:
-                        os.remove(filepath)  # 이름이 바뀐 경우 원래 파일은 제거 (진짜 '덮어쓰기'가 되도록)
-                result_names.append(os.path.basename(dest_path))
-            except Exception as e:
-                error_messages.append(f"{os.path.basename(filepath)}: {e}")
+                results, errors = execute_plan(plan)
+            except Exception as exc:
+                messagebox.showerror("실행 차단", str(exc))
+                self.refresh_actual_preview()
+                return
+            self.status_var.set(f"완료: {len(results)}개 / 실패: {len(errors)}개")
+            detail = "저장 결과:\n" + "\n".join(results)
+            if errors:
+                detail += "\n\n실패:\n" + "\n".join(errors)
+            messagebox.showinfo("처리 결과", detail)
+            self.refresh_actual_preview()
 
-        summary = f"완료: {len(result_names)}개 파일 처리 완료"
-        if error_messages:
-            summary += f" / 실패 {len(error_messages)}개"
-        self.status_var.set(summary)
-
-        save_location = "원본 파일 위치" if overwrite_original else output_folder
-        detail = f"{len(result_names)}개 파일이 아래 위치에 저장되었습니다:\n{save_location}"
-        if error_messages:
-            detail += "\n\n실패 내역:\n" + "\n".join(error_messages)
-        messagebox.showinfo("처리 완료", detail)
+        ttk.Button(buttons, text="취소", command=dialog.destroy).pack(side="right")
+        ttk.Button(buttons, text="확인 후 실행", command=confirm,
+                   state="disabled" if plan.errors else "normal").pack(side="right", padx=8)
+        dialog.grab_set()
 
 
 if __name__ == "__main__":

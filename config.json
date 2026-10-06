@@ -1,0 +1,6 @@
+{
+  "games": ["FI", "ANC"],
+  "languages": ["KO", "EN", "JA", "CHT", "CHS", "ES", "BR", "TH", "ID", "FR", "VN"],
+  "image_resolutions": ["1080x1920", "1080x1080", "800x800", "1200x628", "1200x1500", "1920x1080"],
+  "video_resolutions": ["1920x1080", "1080x1920", "1080x1080"]
+}

@@ -1,0 +1,1730 @@
+[
+  {
+    "args": [
+      "file.png",
+      "ANC",
+      "Karaoke+CTA",
+      "CHS",
+      "261002",
+      false,
+      "사용 안 함 (픽셀 해상도 그대로)",
+      "원본 유지"
+    ],
+    "expected": [
+      "PNG_ANC_Karaoke+CTA_CHS_1080x1080_261002.png",
+      "PNG",
+      "1080x1080",
+      false
+    ]
+  },
+  {
+    "args": [
+      "file.png",
+      "ANC",
+      "Karaoke+CTA",
+      "CHS",
+      "261002",
+      false,
+      "16x9",
+      "원본 유지"
+    ],
+    "expected": [
+      "PNG_ANC_Karaoke+CTA_CHS_1080x1080_261002.png",
+      "PNG",
+      "1080x1080",
+      false
+    ]
+  },
+  {
+    "args": [
+      "file.png",
+      "ANC",
+      "Karaoke+CTA",
+      "CHS",
+      "261002",
+      true,
+      "사용 안 함 (픽셀 해상도 그대로)",
+      "원본 유지"
+    ],
+    "expected": [
+      "PNG_ANC_Karaoke+CTA_CHS_1080x1080_261002.png",
+      "PNG",
+      "1080x1080",
+      false
+    ]
+  },
+  {
+    "args": [
+      "file.png",
+      "ANC",
+      "Karaoke+CTA",
+      "CHS",
+      "261002",
+      true,
+      "16x9",
+      "원본 유지"
+    ],
+    "expected": [
+      "PNG_ANC_Karaoke+CTA_CHS_1080x1080_261002.png",
+      "PNG",
+      "1080x1080",
+      false
+    ]
+  },
+  {
+    "args": [
+      "file.png",
+      "ANC",
+      "Karaoke+CTA",
+      "CHS",
+      "261002",
+      false,
+      "사용 안 함 (픽셀 해상도 그대로)",
+      "JPG"
+    ],
+    "expected": [
+      "JPG_ANC_Karaoke+CTA_CHS_1080x1080_261002.jpg",
+      "JPG",
+      "1080x1080",
+      false
+    ]
+  },
+  {
+    "args": [
+      "file.png",
+      "ANC",
+      "Karaoke+CTA",
+      "CHS",
+      "261002",
+      false,
+      "16x9",
+      "JPG"
+    ],
+    "expected": [
+      "JPG_ANC_Karaoke+CTA_CHS_1080x1080_261002.jpg",
+      "JPG",
+      "1080x1080",
+      false
+    ]
+  },
+  {
+    "args": [
+      "file.png",
+      "ANC",
+      "Karaoke+CTA",
+      "CHS",
+      "261002",
+      true,
+      "사용 안 함 (픽셀 해상도 그대로)",
+      "JPG"
+    ],
+    "expected": [
+      "JPG_ANC_Karaoke+CTA_CHS_1080x1080_261002.jpg",
+      "JPG",
+      "1080x1080",
+      false
+    ]
+  },
+  {
+    "args": [
+      "file.png",
+      "ANC",
+      "Karaoke+CTA",
+      "CHS",
+      "261002",
+      true,
+      "16x9",
+      "JPG"
+    ],
+    "expected": [
+      "JPG_ANC_Karaoke+CTA_CHS_1080x1080_261002.jpg",
+      "JPG",
+      "1080x1080",
+      false
+    ]
+  },
+  {
+    "args": [
+      "file.png",
+      "ANC",
+      "Karaoke+CTA",
+      "CHS",
+      "261002",
+      false,
+      "사용 안 함 (픽셀 해상도 그대로)",
+      "PNG"
+    ],
+    "expected": [
+      "PNG_ANC_Karaoke+CTA_CHS_1080x1080_261002.png",
+      "PNG",
+      "1080x1080",
+      false
+    ]
+  },
+  {
+    "args": [
+      "file.png",
+      "ANC",
+      "Karaoke+CTA",
+      "CHS",
+      "261002",
+      false,
+      "16x9",
+      "PNG"
+    ],
+    "expected": [
+      "PNG_ANC_Karaoke+CTA_CHS_1080x1080_261002.png",
+      "PNG",
+      "1080x1080",
+      false
+    ]
+  },
+  {
+    "args": [
+      "file.png",
+      "ANC",
+      "Karaoke+CTA",
+      "CHS",
+      "261002",
+      true,
+      "사용 안 함 (픽셀 해상도 그대로)",
+      "PNG"
+    ],
+    "expected": [
+      "PNG_ANC_Karaoke+CTA_CHS_1080x1080_261002.png",
+      "PNG",
+      "1080x1080",
+      false
+    ]
+  },
+  {
+    "args": [
+      "file.png",
+      "ANC",
+      "Karaoke+CTA",
+      "CHS",
+      "261002",
+      true,
+      "16x9",
+      "PNG"
+    ],
+    "expected": [
+      "PNG_ANC_Karaoke+CTA_CHS_1080x1080_261002.png",
+      "PNG",
+      "1080x1080",
+      false
+    ]
+  },
+  {
+    "args": [
+      "file.png",
+      "ANC",
+      "Karaoke+CTA",
+      "CHS",
+      "261002",
+      false,
+      "사용 안 함 (픽셀 해상도 그대로)",
+      "WEBP"
+    ],
+    "expected": [
+      "WEBP_ANC_Karaoke+CTA_CHS_1080x1080_261002.webp",
+      "WEBP",
+      "1080x1080",
+      false
+    ]
+  },
+  {
+    "args": [
+      "file.png",
+      "ANC",
+      "Karaoke+CTA",
+      "CHS",
+      "261002",
+      false,
+      "16x9",
+      "WEBP"
+    ],
+    "expected": [
+      "WEBP_ANC_Karaoke+CTA_CHS_1080x1080_261002.webp",
+      "WEBP",
+      "1080x1080",
+      false
+    ]
+  },
+  {
+    "args": [
+      "file.png",
+      "ANC",
+      "Karaoke+CTA",
+      "CHS",
+      "261002",
+      true,
+      "사용 안 함 (픽셀 해상도 그대로)",
+      "WEBP"
+    ],
+    "expected": [
+      "WEBP_ANC_Karaoke+CTA_CHS_1080x1080_261002.webp",
+      "WEBP",
+      "1080x1080",
+      false
+    ]
+  },
+  {
+    "args": [
+      "file.png",
+      "ANC",
+      "Karaoke+CTA",
+      "CHS",
+      "261002",
+      true,
+      "16x9",
+      "WEBP"
+    ],
+    "expected": [
+      "WEBP_ANC_Karaoke+CTA_CHS_1080x1080_261002.webp",
+      "WEBP",
+      "1080x1080",
+      false
+    ]
+  },
+  {
+    "args": [
+      "file.jpg",
+      "ANC",
+      "Karaoke+CTA",
+      "CHS",
+      "261002",
+      false,
+      "사용 안 함 (픽셀 해상도 그대로)",
+      "원본 유지"
+    ],
+    "expected": [
+      "JPG_ANC_Karaoke+CTA_CHS_1080x1080_261002.jpg",
+      "JPG",
+      "1080x1080",
+      false
+    ]
+  },
+  {
+    "args": [
+      "file.jpg",
+      "ANC",
+      "Karaoke+CTA",
+      "CHS",
+      "261002",
+      false,
+      "16x9",
+      "원본 유지"
+    ],
+    "expected": [
+      "JPG_ANC_Karaoke+CTA_CHS_1080x1080_261002.jpg",
+      "JPG",
+      "1080x1080",
+      false
+    ]
+  },
+  {
+    "args": [
+      "file.jpg",
+      "ANC",
+      "Karaoke+CTA",
+      "CHS",
+      "261002",
+      true,
+      "사용 안 함 (픽셀 해상도 그대로)",
+      "원본 유지"
+    ],
+    "expected": [
+      "JPG_ANC_Karaoke+CTA_CHS_1080x1080_261002.jpg",
+      "JPG",
+      "1080x1080",
+      false
+    ]
+  },
+  {
+    "args": [
+      "file.jpg",
+      "ANC",
+      "Karaoke+CTA",
+      "CHS",
+      "261002",
+      true,
+      "16x9",
+      "원본 유지"
+    ],
+    "expected": [
+      "JPG_ANC_Karaoke+CTA_CHS_1080x1080_261002.jpg",
+      "JPG",
+      "1080x1080",
+      false
+    ]
+  },
+  {
+    "args": [
+      "file.jpg",
+      "ANC",
+      "Karaoke+CTA",
+      "CHS",
+      "261002",
+      false,
+      "사용 안 함 (픽셀 해상도 그대로)",
+      "JPG"
+    ],
+    "expected": [
+      "JPG_ANC_Karaoke+CTA_CHS_1080x1080_261002.jpg",
+      "JPG",
+      "1080x1080",
+      false
+    ]
+  },
+  {
+    "args": [
+      "file.jpg",
+      "ANC",
+      "Karaoke+CTA",
+      "CHS",
+      "261002",
+      false,
+      "16x9",
+      "JPG"
+    ],
+    "expected": [
+      "JPG_ANC_Karaoke+CTA_CHS_1080x1080_261002.jpg",
+      "JPG",
+      "1080x1080",
+      false
+    ]
+  },
+  {
+    "args": [
+      "file.jpg",
+      "ANC",
+      "Karaoke+CTA",
+      "CHS",
+      "261002",
+      true,
+      "사용 안 함 (픽셀 해상도 그대로)",
+      "JPG"
+    ],
+    "expected": [
+      "JPG_ANC_Karaoke+CTA_CHS_1080x1080_261002.jpg",
+      "JPG",
+      "1080x1080",
+      false
+    ]
+  },
+  {
+    "args": [
+      "file.jpg",
+      "ANC",
+      "Karaoke+CTA",
+      "CHS",
+      "261002",
+      true,
+      "16x9",
+      "JPG"
+    ],
+    "expected": [
+      "JPG_ANC_Karaoke+CTA_CHS_1080x1080_261002.jpg",
+      "JPG",
+      "1080x1080",
+      false
+    ]
+  },
+  {
+    "args": [
+      "file.jpg",
+      "ANC",
+      "Karaoke+CTA",
+      "CHS",
+      "261002",
+      false,
+      "사용 안 함 (픽셀 해상도 그대로)",
+      "PNG"
+    ],
+    "expected": [
+      "PNG_ANC_Karaoke+CTA_CHS_1080x1080_261002.png",
+      "PNG",
+      "1080x1080",
+      false
+    ]
+  },
+  {
+    "args": [
+      "file.jpg",
+      "ANC",
+      "Karaoke+CTA",
+      "CHS",
+      "261002",
+      false,
+      "16x9",
+      "PNG"
+    ],
+    "expected": [
+      "PNG_ANC_Karaoke+CTA_CHS_1080x1080_261002.png",
+      "PNG",
+      "1080x1080",
+      false
+    ]
+  },
+  {
+    "args": [
+      "file.jpg",
+      "ANC",
+      "Karaoke+CTA",
+      "CHS",
+      "261002",
+      true,
+      "사용 안 함 (픽셀 해상도 그대로)",
+      "PNG"
+    ],
+    "expected": [
+      "PNG_ANC_Karaoke+CTA_CHS_1080x1080_261002.png",
+      "PNG",
+      "1080x1080",
+      false
+    ]
+  },
+  {
+    "args": [
+      "file.jpg",
+      "ANC",
+      "Karaoke+CTA",
+      "CHS",
+      "261002",
+      true,
+      "16x9",
+      "PNG"
+    ],
+    "expected": [
+      "PNG_ANC_Karaoke+CTA_CHS_1080x1080_261002.png",
+      "PNG",
+      "1080x1080",
+      false
+    ]
+  },
+  {
+    "args": [
+      "file.jpg",
+      "ANC",
+      "Karaoke+CTA",
+      "CHS",
+      "261002",
+      false,
+      "사용 안 함 (픽셀 해상도 그대로)",
+      "WEBP"
+    ],
+    "expected": [
+      "WEBP_ANC_Karaoke+CTA_CHS_1080x1080_261002.webp",
+      "WEBP",
+      "1080x1080",
+      false
+    ]
+  },
+  {
+    "args": [
+      "file.jpg",
+      "ANC",
+      "Karaoke+CTA",
+      "CHS",
+      "261002",
+      false,
+      "16x9",
+      "WEBP"
+    ],
+    "expected": [
+      "WEBP_ANC_Karaoke+CTA_CHS_1080x1080_261002.webp",
+      "WEBP",
+      "1080x1080",
+      false
+    ]
+  },
+  {
+    "args": [
+      "file.jpg",
+      "ANC",
+      "Karaoke+CTA",
+      "CHS",
+      "261002",
+      true,
+      "사용 안 함 (픽셀 해상도 그대로)",
+      "WEBP"
+    ],
+    "expected": [
+      "WEBP_ANC_Karaoke+CTA_CHS_1080x1080_261002.webp",
+      "WEBP",
+      "1080x1080",
+      false
+    ]
+  },
+  {
+    "args": [
+      "file.jpg",
+      "ANC",
+      "Karaoke+CTA",
+      "CHS",
+      "261002",
+      true,
+      "16x9",
+      "WEBP"
+    ],
+    "expected": [
+      "WEBP_ANC_Karaoke+CTA_CHS_1080x1080_261002.webp",
+      "WEBP",
+      "1080x1080",
+      false
+    ]
+  },
+  {
+    "args": [
+      "file.jpeg",
+      "ANC",
+      "Karaoke+CTA",
+      "CHS",
+      "261002",
+      false,
+      "사용 안 함 (픽셀 해상도 그대로)",
+      "원본 유지"
+    ],
+    "expected": [
+      "JPEG_ANC_Karaoke+CTA_CHS_1080x1080_261002.jpeg",
+      "JPEG",
+      "1080x1080",
+      false
+    ]
+  },
+  {
+    "args": [
+      "file.jpeg",
+      "ANC",
+      "Karaoke+CTA",
+      "CHS",
+      "261002",
+      false,
+      "16x9",
+      "원본 유지"
+    ],
+    "expected": [
+      "JPEG_ANC_Karaoke+CTA_CHS_1080x1080_261002.jpeg",
+      "JPEG",
+      "1080x1080",
+      false
+    ]
+  },
+  {
+    "args": [
+      "file.jpeg",
+      "ANC",
+      "Karaoke+CTA",
+      "CHS",
+      "261002",
+      true,
+      "사용 안 함 (픽셀 해상도 그대로)",
+      "원본 유지"
+    ],
+    "expected": [
+      "JPEG_ANC_Karaoke+CTA_CHS_1080x1080_261002.jpeg",
+      "JPEG",
+      "1080x1080",
+      false
+    ]
+  },
+  {
+    "args": [
+      "file.jpeg",
+      "ANC",
+      "Karaoke+CTA",
+      "CHS",
+      "261002",
+      true,
+      "16x9",
+      "원본 유지"
+    ],
+    "expected": [
+      "JPEG_ANC_Karaoke+CTA_CHS_1080x1080_261002.jpeg",
+      "JPEG",
+      "1080x1080",
+      false
+    ]
+  },
+  {
+    "args": [
+      "file.jpeg",
+      "ANC",
+      "Karaoke+CTA",
+      "CHS",
+      "261002",
+      false,
+      "사용 안 함 (픽셀 해상도 그대로)",
+      "JPG"
+    ],
+    "expected": [
+      "JPG_ANC_Karaoke+CTA_CHS_1080x1080_261002.jpg",
+      "JPG",
+      "1080x1080",
+      false
+    ]
+  },
+  {
+    "args": [
+      "file.jpeg",
+      "ANC",
+      "Karaoke+CTA",
+      "CHS",
+      "261002",
+      false,
+      "16x9",
+      "JPG"
+    ],
+    "expected": [
+      "JPG_ANC_Karaoke+CTA_CHS_1080x1080_261002.jpg",
+      "JPG",
+      "1080x1080",
+      false
+    ]
+  },
+  {
+    "args": [
+      "file.jpeg",
+      "ANC",
+      "Karaoke+CTA",
+      "CHS",
+      "261002",
+      true,
+      "사용 안 함 (픽셀 해상도 그대로)",
+      "JPG"
+    ],
+    "expected": [
+      "JPG_ANC_Karaoke+CTA_CHS_1080x1080_261002.jpg",
+      "JPG",
+      "1080x1080",
+      false
+    ]
+  },
+  {
+    "args": [
+      "file.jpeg",
+      "ANC",
+      "Karaoke+CTA",
+      "CHS",
+      "261002",
+      true,
+      "16x9",
+      "JPG"
+    ],
+    "expected": [
+      "JPG_ANC_Karaoke+CTA_CHS_1080x1080_261002.jpg",
+      "JPG",
+      "1080x1080",
+      false
+    ]
+  },
+  {
+    "args": [
+      "file.jpeg",
+      "ANC",
+      "Karaoke+CTA",
+      "CHS",
+      "261002",
+      false,
+      "사용 안 함 (픽셀 해상도 그대로)",
+      "PNG"
+    ],
+    "expected": [
+      "PNG_ANC_Karaoke+CTA_CHS_1080x1080_261002.png",
+      "PNG",
+      "1080x1080",
+      false
+    ]
+  },
+  {
+    "args": [
+      "file.jpeg",
+      "ANC",
+      "Karaoke+CTA",
+      "CHS",
+      "261002",
+      false,
+      "16x9",
+      "PNG"
+    ],
+    "expected": [
+      "PNG_ANC_Karaoke+CTA_CHS_1080x1080_261002.png",
+      "PNG",
+      "1080x1080",
+      false
+    ]
+  },
+  {
+    "args": [
+      "file.jpeg",
+      "ANC",
+      "Karaoke+CTA",
+      "CHS",
+      "261002",
+      true,
+      "사용 안 함 (픽셀 해상도 그대로)",
+      "PNG"
+    ],
+    "expected": [
+      "PNG_ANC_Karaoke+CTA_CHS_1080x1080_261002.png",
+      "PNG",
+      "1080x1080",
+      false
+    ]
+  },
+  {
+    "args": [
+      "file.jpeg",
+      "ANC",
+      "Karaoke+CTA",
+      "CHS",
+      "261002",
+      true,
+      "16x9",
+      "PNG"
+    ],
+    "expected": [
+      "PNG_ANC_Karaoke+CTA_CHS_1080x1080_261002.png",
+      "PNG",
+      "1080x1080",
+      false
+    ]
+  },
+  {
+    "args": [
+      "file.jpeg",
+      "ANC",
+      "Karaoke+CTA",
+      "CHS",
+      "261002",
+      false,
+      "사용 안 함 (픽셀 해상도 그대로)",
+      "WEBP"
+    ],
+    "expected": [
+      "WEBP_ANC_Karaoke+CTA_CHS_1080x1080_261002.webp",
+      "WEBP",
+      "1080x1080",
+      false
+    ]
+  },
+  {
+    "args": [
+      "file.jpeg",
+      "ANC",
+      "Karaoke+CTA",
+      "CHS",
+      "261002",
+      false,
+      "16x9",
+      "WEBP"
+    ],
+    "expected": [
+      "WEBP_ANC_Karaoke+CTA_CHS_1080x1080_261002.webp",
+      "WEBP",
+      "1080x1080",
+      false
+    ]
+  },
+  {
+    "args": [
+      "file.jpeg",
+      "ANC",
+      "Karaoke+CTA",
+      "CHS",
+      "261002",
+      true,
+      "사용 안 함 (픽셀 해상도 그대로)",
+      "WEBP"
+    ],
+    "expected": [
+      "WEBP_ANC_Karaoke+CTA_CHS_1080x1080_261002.webp",
+      "WEBP",
+      "1080x1080",
+      false
+    ]
+  },
+  {
+    "args": [
+      "file.jpeg",
+      "ANC",
+      "Karaoke+CTA",
+      "CHS",
+      "261002",
+      true,
+      "16x9",
+      "WEBP"
+    ],
+    "expected": [
+      "WEBP_ANC_Karaoke+CTA_CHS_1080x1080_261002.webp",
+      "WEBP",
+      "1080x1080",
+      false
+    ]
+  },
+  {
+    "args": [
+      "file.webp",
+      "ANC",
+      "Karaoke+CTA",
+      "CHS",
+      "261002",
+      false,
+      "사용 안 함 (픽셀 해상도 그대로)",
+      "원본 유지"
+    ],
+    "expected": [
+      "WEBP_ANC_Karaoke+CTA_CHS_1080x1080_261002.webp",
+      "WEBP",
+      "1080x1080",
+      false
+    ]
+  },
+  {
+    "args": [
+      "file.webp",
+      "ANC",
+      "Karaoke+CTA",
+      "CHS",
+      "261002",
+      false,
+      "16x9",
+      "원본 유지"
+    ],
+    "expected": [
+      "WEBP_ANC_Karaoke+CTA_CHS_1080x1080_261002.webp",
+      "WEBP",
+      "1080x1080",
+      false
+    ]
+  },
+  {
+    "args": [
+      "file.webp",
+      "ANC",
+      "Karaoke+CTA",
+      "CHS",
+      "261002",
+      true,
+      "사용 안 함 (픽셀 해상도 그대로)",
+      "원본 유지"
+    ],
+    "expected": [
+      "WEBP_ANC_Karaoke+CTA_CHS_1080x1080_261002.webp",
+      "WEBP",
+      "1080x1080",
+      false
+    ]
+  },
+  {
+    "args": [
+      "file.webp",
+      "ANC",
+      "Karaoke+CTA",
+      "CHS",
+      "261002",
+      true,
+      "16x9",
+      "원본 유지"
+    ],
+    "expected": [
+      "WEBP_ANC_Karaoke+CTA_CHS_1080x1080_261002.webp",
+      "WEBP",
+      "1080x1080",
+      false
+    ]
+  },
+  {
+    "args": [
+      "file.webp",
+      "ANC",
+      "Karaoke+CTA",
+      "CHS",
+      "261002",
+      false,
+      "사용 안 함 (픽셀 해상도 그대로)",
+      "JPG"
+    ],
+    "expected": [
+      "JPG_ANC_Karaoke+CTA_CHS_1080x1080_261002.jpg",
+      "JPG",
+      "1080x1080",
+      false
+    ]
+  },
+  {
+    "args": [
+      "file.webp",
+      "ANC",
+      "Karaoke+CTA",
+      "CHS",
+      "261002",
+      false,
+      "16x9",
+      "JPG"
+    ],
+    "expected": [
+      "JPG_ANC_Karaoke+CTA_CHS_1080x1080_261002.jpg",
+      "JPG",
+      "1080x1080",
+      false
+    ]
+  },
+  {
+    "args": [
+      "file.webp",
+      "ANC",
+      "Karaoke+CTA",
+      "CHS",
+      "261002",
+      true,
+      "사용 안 함 (픽셀 해상도 그대로)",
+      "JPG"
+    ],
+    "expected": [
+      "JPG_ANC_Karaoke+CTA_CHS_1080x1080_261002.jpg",
+      "JPG",
+      "1080x1080",
+      false
+    ]
+  },
+  {
+    "args": [
+      "file.webp",
+      "ANC",
+      "Karaoke+CTA",
+      "CHS",
+      "261002",
+      true,
+      "16x9",
+      "JPG"
+    ],
+    "expected": [
+      "JPG_ANC_Karaoke+CTA_CHS_1080x1080_261002.jpg",
+      "JPG",
+      "1080x1080",
+      false
+    ]
+  },
+  {
+    "args": [
+      "file.webp",
+      "ANC",
+      "Karaoke+CTA",
+      "CHS",
+      "261002",
+      false,
+      "사용 안 함 (픽셀 해상도 그대로)",
+      "PNG"
+    ],
+    "expected": [
+      "PNG_ANC_Karaoke+CTA_CHS_1080x1080_261002.png",
+      "PNG",
+      "1080x1080",
+      false
+    ]
+  },
+  {
+    "args": [
+      "file.webp",
+      "ANC",
+      "Karaoke+CTA",
+      "CHS",
+      "261002",
+      false,
+      "16x9",
+      "PNG"
+    ],
+    "expected": [
+      "PNG_ANC_Karaoke+CTA_CHS_1080x1080_261002.png",
+      "PNG",
+      "1080x1080",
+      false
+    ]
+  },
+  {
+    "args": [
+      "file.webp",
+      "ANC",
+      "Karaoke+CTA",
+      "CHS",
+      "261002",
+      true,
+      "사용 안 함 (픽셀 해상도 그대로)",
+      "PNG"
+    ],
+    "expected": [
+      "PNG_ANC_Karaoke+CTA_CHS_1080x1080_261002.png",
+      "PNG",
+      "1080x1080",
+      false
+    ]
+  },
+  {
+    "args": [
+      "file.webp",
+      "ANC",
+      "Karaoke+CTA",
+      "CHS",
+      "261002",
+      true,
+      "16x9",
+      "PNG"
+    ],
+    "expected": [
+      "PNG_ANC_Karaoke+CTA_CHS_1080x1080_261002.png",
+      "PNG",
+      "1080x1080",
+      false
+    ]
+  },
+  {
+    "args": [
+      "file.webp",
+      "ANC",
+      "Karaoke+CTA",
+      "CHS",
+      "261002",
+      false,
+      "사용 안 함 (픽셀 해상도 그대로)",
+      "WEBP"
+    ],
+    "expected": [
+      "WEBP_ANC_Karaoke+CTA_CHS_1080x1080_261002.webp",
+      "WEBP",
+      "1080x1080",
+      false
+    ]
+  },
+  {
+    "args": [
+      "file.webp",
+      "ANC",
+      "Karaoke+CTA",
+      "CHS",
+      "261002",
+      false,
+      "16x9",
+      "WEBP"
+    ],
+    "expected": [
+      "WEBP_ANC_Karaoke+CTA_CHS_1080x1080_261002.webp",
+      "WEBP",
+      "1080x1080",
+      false
+    ]
+  },
+  {
+    "args": [
+      "file.webp",
+      "ANC",
+      "Karaoke+CTA",
+      "CHS",
+      "261002",
+      true,
+      "사용 안 함 (픽셀 해상도 그대로)",
+      "WEBP"
+    ],
+    "expected": [
+      "WEBP_ANC_Karaoke+CTA_CHS_1080x1080_261002.webp",
+      "WEBP",
+      "1080x1080",
+      false
+    ]
+  },
+  {
+    "args": [
+      "file.webp",
+      "ANC",
+      "Karaoke+CTA",
+      "CHS",
+      "261002",
+      true,
+      "16x9",
+      "WEBP"
+    ],
+    "expected": [
+      "WEBP_ANC_Karaoke+CTA_CHS_1080x1080_261002.webp",
+      "WEBP",
+      "1080x1080",
+      false
+    ]
+  },
+  {
+    "args": [
+      "file.mp4",
+      "ANC",
+      "Karaoke+CTA",
+      "CHS",
+      "261002",
+      false,
+      "사용 안 함 (픽셀 해상도 그대로)",
+      "원본 유지"
+    ],
+    "expected": [
+      "VID_ANC_Karaoke+CTA_CHS_1080x1080_261002.mp4",
+      "VID",
+      "1080x1080",
+      true
+    ]
+  },
+  {
+    "args": [
+      "file.mp4",
+      "ANC",
+      "Karaoke+CTA",
+      "CHS",
+      "261002",
+      false,
+      "16x9",
+      "원본 유지"
+    ],
+    "expected": [
+      "VID_ANC_Karaoke+CTA_CHS_16x9_261002.mp4",
+      "VID",
+      "16x9",
+      true
+    ]
+  },
+  {
+    "args": [
+      "file.mp4",
+      "ANC",
+      "Karaoke+CTA",
+      "CHS",
+      "261002",
+      true,
+      "사용 안 함 (픽셀 해상도 그대로)",
+      "원본 유지"
+    ],
+    "expected": [
+      "VID_ANC_Karaoke+CTA_CHS_1080x1080_30sec_261002.mp4",
+      "VID",
+      "1080x1080",
+      true
+    ]
+  },
+  {
+    "args": [
+      "file.mp4",
+      "ANC",
+      "Karaoke+CTA",
+      "CHS",
+      "261002",
+      true,
+      "16x9",
+      "원본 유지"
+    ],
+    "expected": [
+      "VID_ANC_Karaoke+CTA_CHS_16x9_30sec_261002.mp4",
+      "VID",
+      "16x9",
+      true
+    ]
+  },
+  {
+    "args": [
+      "file.mp4",
+      "ANC",
+      "Karaoke+CTA",
+      "CHS",
+      "261002",
+      false,
+      "사용 안 함 (픽셀 해상도 그대로)",
+      "JPG"
+    ],
+    "expected": [
+      "VID_ANC_Karaoke+CTA_CHS_1080x1080_261002.mp4",
+      "VID",
+      "1080x1080",
+      true
+    ]
+  },
+  {
+    "args": [
+      "file.mp4",
+      "ANC",
+      "Karaoke+CTA",
+      "CHS",
+      "261002",
+      false,
+      "16x9",
+      "JPG"
+    ],
+    "expected": [
+      "VID_ANC_Karaoke+CTA_CHS_16x9_261002.mp4",
+      "VID",
+      "16x9",
+      true
+    ]
+  },
+  {
+    "args": [
+      "file.mp4",
+      "ANC",
+      "Karaoke+CTA",
+      "CHS",
+      "261002",
+      true,
+      "사용 안 함 (픽셀 해상도 그대로)",
+      "JPG"
+    ],
+    "expected": [
+      "VID_ANC_Karaoke+CTA_CHS_1080x1080_30sec_261002.mp4",
+      "VID",
+      "1080x1080",
+      true
+    ]
+  },
+  {
+    "args": [
+      "file.mp4",
+      "ANC",
+      "Karaoke+CTA",
+      "CHS",
+      "261002",
+      true,
+      "16x9",
+      "JPG"
+    ],
+    "expected": [
+      "VID_ANC_Karaoke+CTA_CHS_16x9_30sec_261002.mp4",
+      "VID",
+      "16x9",
+      true
+    ]
+  },
+  {
+    "args": [
+      "file.mp4",
+      "ANC",
+      "Karaoke+CTA",
+      "CHS",
+      "261002",
+      false,
+      "사용 안 함 (픽셀 해상도 그대로)",
+      "PNG"
+    ],
+    "expected": [
+      "VID_ANC_Karaoke+CTA_CHS_1080x1080_261002.mp4",
+      "VID",
+      "1080x1080",
+      true
+    ]
+  },
+  {
+    "args": [
+      "file.mp4",
+      "ANC",
+      "Karaoke+CTA",
+      "CHS",
+      "261002",
+      false,
+      "16x9",
+      "PNG"
+    ],
+    "expected": [
+      "VID_ANC_Karaoke+CTA_CHS_16x9_261002.mp4",
+      "VID",
+      "16x9",
+      true
+    ]
+  },
+  {
+    "args": [
+      "file.mp4",
+      "ANC",
+      "Karaoke+CTA",
+      "CHS",
+      "261002",
+      true,
+      "사용 안 함 (픽셀 해상도 그대로)",
+      "PNG"
+    ],
+    "expected": [
+      "VID_ANC_Karaoke+CTA_CHS_1080x1080_30sec_261002.mp4",
+      "VID",
+      "1080x1080",
+      true
+    ]
+  },
+  {
+    "args": [
+      "file.mp4",
+      "ANC",
+      "Karaoke+CTA",
+      "CHS",
+      "261002",
+      true,
+      "16x9",
+      "PNG"
+    ],
+    "expected": [
+      "VID_ANC_Karaoke+CTA_CHS_16x9_30sec_261002.mp4",
+      "VID",
+      "16x9",
+      true
+    ]
+  },
+  {
+    "args": [
+      "file.mp4",
+      "ANC",
+      "Karaoke+CTA",
+      "CHS",
+      "261002",
+      false,
+      "사용 안 함 (픽셀 해상도 그대로)",
+      "WEBP"
+    ],
+    "expected": [
+      "VID_ANC_Karaoke+CTA_CHS_1080x1080_261002.mp4",
+      "VID",
+      "1080x1080",
+      true
+    ]
+  },
+  {
+    "args": [
+      "file.mp4",
+      "ANC",
+      "Karaoke+CTA",
+      "CHS",
+      "261002",
+      false,
+      "16x9",
+      "WEBP"
+    ],
+    "expected": [
+      "VID_ANC_Karaoke+CTA_CHS_16x9_261002.mp4",
+      "VID",
+      "16x9",
+      true
+    ]
+  },
+  {
+    "args": [
+      "file.mp4",
+      "ANC",
+      "Karaoke+CTA",
+      "CHS",
+      "261002",
+      true,
+      "사용 안 함 (픽셀 해상도 그대로)",
+      "WEBP"
+    ],
+    "expected": [
+      "VID_ANC_Karaoke+CTA_CHS_1080x1080_30sec_261002.mp4",
+      "VID",
+      "1080x1080",
+      true
+    ]
+  },
+  {
+    "args": [
+      "file.mp4",
+      "ANC",
+      "Karaoke+CTA",
+      "CHS",
+      "261002",
+      true,
+      "16x9",
+      "WEBP"
+    ],
+    "expected": [
+      "VID_ANC_Karaoke+CTA_CHS_16x9_30sec_261002.mp4",
+      "VID",
+      "16x9",
+      true
+    ]
+  },
+  {
+    "args": [
+      "file.mov",
+      "ANC",
+      "Karaoke+CTA",
+      "CHS",
+      "261002",
+      false,
+      "사용 안 함 (픽셀 해상도 그대로)",
+      "원본 유지"
+    ],
+    "expected": [
+      "VID_ANC_Karaoke+CTA_CHS_1080x1080_261002.mov",
+      "VID",
+      "1080x1080",
+      true
+    ]
+  },
+  {
+    "args": [
+      "file.mov",
+      "ANC",
+      "Karaoke+CTA",
+      "CHS",
+      "261002",
+      false,
+      "16x9",
+      "원본 유지"
+    ],
+    "expected": [
+      "VID_ANC_Karaoke+CTA_CHS_16x9_261002.mov",
+      "VID",
+      "16x9",
+      true
+    ]
+  },
+  {
+    "args": [
+      "file.mov",
+      "ANC",
+      "Karaoke+CTA",
+      "CHS",
+      "261002",
+      true,
+      "사용 안 함 (픽셀 해상도 그대로)",
+      "원본 유지"
+    ],
+    "expected": [
+      "VID_ANC_Karaoke+CTA_CHS_1080x1080_30sec_261002.mov",
+      "VID",
+      "1080x1080",
+      true
+    ]
+  },
+  {
+    "args": [
+      "file.mov",
+      "ANC",
+      "Karaoke+CTA",
+      "CHS",
+      "261002",
+      true,
+      "16x9",
+      "원본 유지"
+    ],
+    "expected": [
+      "VID_ANC_Karaoke+CTA_CHS_16x9_30sec_261002.mov",
+      "VID",
+      "16x9",
+      true
+    ]
+  },
+  {
+    "args": [
+      "file.mov",
+      "ANC",
+      "Karaoke+CTA",
+      "CHS",
+      "261002",
+      false,
+      "사용 안 함 (픽셀 해상도 그대로)",
+      "JPG"
+    ],
+    "expected": [
+      "VID_ANC_Karaoke+CTA_CHS_1080x1080_261002.mov",
+      "VID",
+      "1080x1080",
+      true
+    ]
+  },
+  {
+    "args": [
+      "file.mov",
+      "ANC",
+      "Karaoke+CTA",
+      "CHS",
+      "261002",
+      false,
+      "16x9",
+      "JPG"
+    ],
+    "expected": [
+      "VID_ANC_Karaoke+CTA_CHS_16x9_261002.mov",
+      "VID",
+      "16x9",
+      true
+    ]
+  },
+  {
+    "args": [
+      "file.mov",
+      "ANC",
+      "Karaoke+CTA",
+      "CHS",
+      "261002",
+      true,
+      "사용 안 함 (픽셀 해상도 그대로)",
+      "JPG"
+    ],
+    "expected": [
+      "VID_ANC_Karaoke+CTA_CHS_1080x1080_30sec_261002.mov",
+      "VID",
+      "1080x1080",
+      true
+    ]
+  },
+  {
+    "args": [
+      "file.mov",
+      "ANC",
+      "Karaoke+CTA",
+      "CHS",
+      "261002",
+      true,
+      "16x9",
+      "JPG"
+    ],
+    "expected": [
+      "VID_ANC_Karaoke+CTA_CHS_16x9_30sec_261002.mov",
+      "VID",
+      "16x9",
+      true
+    ]
+  },
+  {
+    "args": [
+      "file.mov",
+      "ANC",
+      "Karaoke+CTA",
+      "CHS",
+      "261002",
+      false,
+      "사용 안 함 (픽셀 해상도 그대로)",
+      "PNG"
+    ],
+    "expected": [
+      "VID_ANC_Karaoke+CTA_CHS_1080x1080_261002.mov",
+      "VID",
+      "1080x1080",
+      true
+    ]
+  },
+  {
+    "args": [
+      "file.mov",
+      "ANC",
+      "Karaoke+CTA",
+      "CHS",
+      "261002",
+      false,
+      "16x9",
+      "PNG"
+    ],
+    "expected": [
+      "VID_ANC_Karaoke+CTA_CHS_16x9_261002.mov",
+      "VID",
+      "16x9",
+      true
+    ]
+  },
+  {
+    "args": [
+      "file.mov",
+      "ANC",
+      "Karaoke+CTA",
+      "CHS",
+      "261002",
+      true,
+      "사용 안 함 (픽셀 해상도 그대로)",
+      "PNG"
+    ],
+    "expected": [
+      "VID_ANC_Karaoke+CTA_CHS_1080x1080_30sec_261002.mov",
+      "VID",
+      "1080x1080",
+      true
+    ]
+  },
+  {
+    "args": [
+      "file.mov",
+      "ANC",
+      "Karaoke+CTA",
+      "CHS",
+      "261002",
+      true,
+      "16x9",
+      "PNG"
+    ],
+    "expected": [
+      "VID_ANC_Karaoke+CTA_CHS_16x9_30sec_261002.mov",
+      "VID",
+      "16x9",
+      true
+    ]
+  },
+  {
+    "args": [
+      "file.mov",
+      "ANC",
+      "Karaoke+CTA",
+      "CHS",
+      "261002",
+      false,
+      "사용 안 함 (픽셀 해상도 그대로)",
+      "WEBP"
+    ],
+    "expected": [
+      "VID_ANC_Karaoke+CTA_CHS_1080x1080_261002.mov",
+      "VID",
+      "1080x1080",
+      true
+    ]
+  },
+  {
+    "args": [
+      "file.mov",
+      "ANC",
+      "Karaoke+CTA",
+      "CHS",
+      "261002",
+      false,
+      "16x9",
+      "WEBP"
+    ],
+    "expected": [
+      "VID_ANC_Karaoke+CTA_CHS_16x9_261002.mov",
+      "VID",
+      "16x9",
+      true
+    ]
+  },
+  {
+    "args": [
+      "file.mov",
+      "ANC",
+      "Karaoke+CTA",
+      "CHS",
+      "261002",
+      true,
+      "사용 안 함 (픽셀 해상도 그대로)",
+      "WEBP"
+    ],
+    "expected": [
+      "VID_ANC_Karaoke+CTA_CHS_1080x1080_30sec_261002.mov",
+      "VID",
+      "1080x1080",
+      true
+    ]
+  },
+  {
+    "args": [
+      "file.mov",
+      "ANC",
+      "Karaoke+CTA",
+      "CHS",
+      "261002",
+      true,
+      "16x9",
+      "WEBP"
+    ],
+    "expected": [
+      "VID_ANC_Karaoke+CTA_CHS_16x9_30sec_261002.mov",
+      "VID",
+      "16x9",
+      true
+    ]
+  }
+]
