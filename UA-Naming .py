@@ -77,6 +77,7 @@ from ua_naming.naming import (
 )
 from ua_naming.media import VIDEO_EXTENSIONS
 from ua_naming.planning import Options, build_plan, execute_plan, describe_plan
+from ua_naming.theme import IMAGE_ACCENT, VIDEO_ACCENT, WARNING_COLOR, style_surface, style_text, fill_preview
 from ua_naming.dialogs import confirm_execution
 from ua_naming.settings import load_config
 
@@ -226,6 +227,7 @@ class App(_BaseTk):
         body = ttk.Frame(self)
         body.pack(fill="both", expand=True, padx=10, pady=10)
         canvas = tk.Canvas(body, highlightthickness=0)
+        style_surface(canvas)
         body_scroll = ttk.Scrollbar(body, orient="vertical", command=canvas.yview)
         canvas.configure(yscrollcommand=body_scroll.set)
         body_scroll.pack(side="right", fill="y")
@@ -249,7 +251,7 @@ class App(_BaseTk):
         )
         self.preview_image_var = tk.StringVar()
         ttk.Label(
-            preview_box, textvariable=self.preview_image_var, foreground="#FFBB18"
+            preview_box, textvariable=self.preview_image_var, foreground=IMAGE_ACCENT
         ).grid(row=1, column=1, sticky="w", padx=(0, 8), pady=(0, 2))
 
         ttk.Label(preview_box, text="영상 예시", width=10, anchor="w").grid(
@@ -257,7 +259,7 @@ class App(_BaseTk):
         )
         self.preview_video_var = tk.StringVar()
         ttk.Label(
-            preview_box, textvariable=self.preview_video_var, foreground="#8BBA08"
+            preview_box, textvariable=self.preview_video_var, foreground=VIDEO_ACCENT
         ).grid(row=2, column=1, sticky="w", padx=(0, 8), pady=(0, 8))
 
         ttk.Label(frame, text="게임 타이틀명").grid(row=1, column=0, sticky="w", **pad)
@@ -449,11 +451,12 @@ class App(_BaseTk):
         ToolTip(run_button, "위에서 설정한 옵션대로 파일 이름을 바꿔 지정한 폴더에 복사본으로 저장합니다.")
 
         self.status_var = tk.StringVar(value="대기 중")
-        ttk.Label(frame, textvariable=self.status_var, foreground="#FFBB18").grid(row=21, column=0, columnspan=3, sticky="w", **pad)
+        ttk.Label(frame, textvariable=self.status_var, foreground=IMAGE_ACCENT).grid(row=21, column=0, columnspan=3, sticky="w", **pad)
 
         preview_frame = ttk.LabelFrame(frame, text="선택 파일 Preview · 소재 세트")
         preview_frame.grid(row=22, column=0, columnspan=3, sticky="nsew", padx=10, pady=6)
         self.actual_preview = tk.Text(preview_frame, height=8, width=70, wrap="word")
+        style_text(self.actual_preview)
         scroll = ttk.Scrollbar(preview_frame, command=self.actual_preview.yview)
         self.actual_preview.configure(yscrollcommand=scroll.set)
         scroll.pack(side="right", fill="y")
@@ -619,10 +622,7 @@ class App(_BaseTk):
         except Exception as exc:
             text = f"Preview 분석 실패: {exc}"
             notice = "Preview 분석 실패"
-        self.actual_preview.configure(state="normal")
-        self.actual_preview.delete("1.0", tk.END)
-        self.actual_preview.insert("1.0", text)
-        self.actual_preview.configure(state="disabled")
+        fill_preview(self.actual_preview, text)
         self.show_toast(notice)
 
     def show_toast(self, text):
@@ -632,7 +632,7 @@ class App(_BaseTk):
             self._toast_job = None
         if self._toast_job:
             self.after_cancel(self._toast_job)
-        self._toast.configure(text=text)
+        self._toast.configure(text=text, foreground=WARNING_COLOR if ("경고" in text or "차단" in text or "실패" in text) else ttk.Style(self).lookup("TLabel", "foreground"))
         self._toast.place(relx=1.0, rely=1.0, anchor="se", x=-16, y=-16)
         self._toast.lift()
         self._toast_job = self.after(2500, self.hide_toast)
@@ -648,18 +648,19 @@ class App(_BaseTk):
             messagebox.showerror("Preview 오류", str(exc))
             return
         dialog = tk.Toplevel(self)
+        style_surface(dialog)
         dialog.title("전체 결과 Preview — 확인 전에는 파일을 변경하지 않습니다")
         dialog.geometry("850x600")
         dialog.transient(self)
         text_frame = ttk.Frame(dialog)
         text_frame.pack(fill="both", expand=True, padx=10, pady=10)
         text = tk.Text(text_frame, wrap="word")
+        style_text(text)
         scroll = ttk.Scrollbar(text_frame, command=text.yview)
         text.configure(yscrollcommand=scroll.set)
         scroll.pack(side="right", fill="y")
         text.pack(fill="both", expand=True)
-        text.insert("1.0", describe_plan(plan))
-        text.configure(state="disabled")
+        fill_preview(text, describe_plan(plan))
         buttons = ttk.Frame(dialog)
         buttons.pack(fill="x", padx=10, pady=10)
 

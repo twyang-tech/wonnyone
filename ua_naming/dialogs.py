@@ -1,6 +1,7 @@
 """Accessible confirmation for the already prepared local operation plan."""
 import tkinter as tk
 from tkinter import ttk
+from .theme import WARNING_COLOR, style_surface, style_text
 
 
 def confirmation_summary(plan):
@@ -29,20 +30,24 @@ def confirm_execution(parent, plan):
     previous_grab = parent.grab_current()
     accepted = False
     dialog = tk.Toplevel(parent)
+    style_surface(dialog)
     dialog.title('최종 실행 확인')
     dialog.transient(parent)
     dialog.resizable(True, True)
     ttk.Label(dialog, text=confirmation_summary(plan), wraplength=580, justify='left').pack(
         fill='x', padx=18, pady=16)
     if plan.warnings:
-        frame = ttk.LabelFrame(dialog, text='경고 내용')
+        style = ttk.Style(dialog)
+        style.configure('Warning.TLabelframe.Label', foreground=WARNING_COLOR)
+        frame = ttk.LabelFrame(dialog, text='경고 내용', style='Warning.TLabelframe')
         frame.pack(fill='both', expand=True, padx=18, pady=(0, 12))
         text = tk.Text(frame, height=8, width=72, wrap='word', takefocus=True)
+        style_text(text)
         scroll = ttk.Scrollbar(frame, command=text.yview)
         text.configure(yscrollcommand=scroll.set)
         scroll.pack(side='right', fill='y')
         text.pack(fill='both', expand=True)
-        text.insert('1.0', '\n'.join(plan.warnings))
+        text.insert('1.0', '\n'.join(plan.warnings), 'warning')
         text.configure(state='disabled')
         # Text normally consumes Tab; allow traversal through the modal controls.
         text.bind('<Tab>', lambda e: (e.widget.tk_focusNext().focus_set(), 'break')[1])
