@@ -155,14 +155,15 @@ def build_plan(paths, options, config):
     return plan
 
 
-def describe_plan(plan):
+def describe_plan(plan, include_warnings=True):
     lines = ['처리 방식: ' + ('원본 위치 처리 (변경 시 원본 제거)' if plan.options.overwrite else '복사본 저장 (원본 유지)'), '']
     for f in plan.files:
         lines.extend([f'원본: {f.source}', f'{f.media.kind} / {f.media.format} / {f.media.resolution}', f'최종: {f.destination}', ''])
-    lines += ['소재 세트', *plan.sets]
-    if plan.warnings:
+    sets = plan.sets if include_warnings else [entry.split(' — ', 1)[0] for entry in plan.sets]
+    lines += ['소재 세트', *sets]
+    if include_warnings and plan.warnings:
         lines += ['', '경고 (확인 후 진행 가능)', *plan.warnings]
-    if plan.errors:
+    if include_warnings and plan.errors:
         lines += ['', '실행 차단 (수정 필요)', *plan.errors]
     return '\n'.join(lines)
 

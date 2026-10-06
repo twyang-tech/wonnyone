@@ -4,12 +4,25 @@ from types import SimpleNamespace
 from unittest.mock import Mock, patch
 import runpy
 import unittest
-from ua_naming.planning import Plan, Options, PlannedFile
+from ua_naming.planning import Plan, Options, PlannedFile, describe_plan
 from ua_naming.media import MediaInfo
 from ua_naming.dialogs import confirmation_summary
 
 
 class ConfirmationFlowTests(unittest.TestCase):
+    def test_preview_body_keeps_set_status_without_repeating_alerts(self):
+        plan = Plan(Options())
+        plan.sets = ['ANC / Karaoke / CHS\n이미지 세트 경고: 5 / 6 — 누락: 1200x628']
+        plan.warnings = ['누락: 1200x628']
+        plan.errors = ['소재명을 입력해주세요.']
+        body = describe_plan(plan, include_warnings=False)
+        self.assertIn('ANC / Karaoke / CHS', body)
+        self.assertIn('이미지 세트 경고: 5 / 6', body)
+        self.assertNotIn('누락: 1200x628', body)
+        self.assertNotIn('소재명을 입력해주세요.', body)
+        self.assertEqual(plan.warnings, ['누락: 1200x628'])
+        self.assertEqual(plan.errors, ['소재명을 입력해주세요.'])
+
     def test_summary_has_counts_without_paths_or_warning_details(self):
         plan = Plan(Options())
         plan.files = [PlannedFile(Path('/tmp/private.png'), Path('/tmp/out/renamed.png'),

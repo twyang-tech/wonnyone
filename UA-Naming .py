@@ -467,12 +467,18 @@ class App(_BaseTk):
         ttk.Label(preview_heading, text="선택 파일 Preview · 소재 세트").grid(row=0, column=0, sticky="w")
         ttk.Label(preview_heading, textvariable=self.status_var, foreground=IMAGE_ACCENT).grid(row=0, column=1, sticky="e")
 
+        # One continuous outer edge; children are inset and carry no panel border.
         panel_style = ttk.Style(self)
-        panel_style.configure("Preview.TLabelframe", borderwidth=1, relief="solid",
-                              bordercolor=panel_style.lookup("TEntry", "bordercolor") or
-                              panel_style.lookup("TButton", "background"))
-        preview_frame = ttk.LabelFrame(left, style="Preview.TLabelframe")
-        preview_frame.grid(row=22, column=0, sticky="nsew", padx=10, pady=6)
+        border_color = (panel_style.lookup("TEntry", "bordercolor") or
+                        panel_style.lookup("TButton", "background"))
+        preview_border = tk.Frame(left, borderwidth=0, highlightthickness=1,
+                                  highlightbackground=border_color, highlightcolor=border_color)
+        style_surface(preview_border)
+        preview_border.grid(row=22, column=0, sticky="nsew", padx=10, pady=6)
+        preview_border.columnconfigure(0, weight=1)
+        preview_border.rowconfigure(0, weight=1)
+        preview_frame = ttk.Frame(preview_border)
+        preview_frame.grid(row=0, column=0, sticky="nsew", padx=1, pady=1)
         preview_frame.columnconfigure(0, weight=1)
         preview_frame.rowconfigure(1, weight=1)
         self.preview_alert = SingleLineLabel(preview_frame, foreground=WARNING_COLOR, padding=(8, 6))
@@ -633,16 +639,16 @@ class App(_BaseTk):
             return
         try:
             plan = build_plan(tuple(self.selected_files), self.current_options(), CONFIG)
-            text = describe_plan(plan)
+            text = describe_plan(plan, include_warnings=False)
             alerts = (["실행 차단 (수정 필요)"] + plan.errors if plan.errors else [])
             if plan.warnings:
                 alerts += [f"경고 {len(plan.warnings)}건 (확인 후 진행 가능)"] + plan.warnings
             notice = (f"실행 차단 {len(plan.errors)}건" if plan.errors else
                       f"경고 {len(plan.warnings)}건 발견" if plan.warnings else "Preview 갱신 완료")
         except Exception as exc:
-            text = f"Preview 분석 실패: {exc}"
+            text = ""
             notice = "Preview 분석 실패"
-            alerts = [text]
+            alerts = [f"Preview 분석 실패: {exc}"]
         self.preview_alert.set_text(" / ".join(alerts) if alerts else "정상: 경고 없음")
         self.preview_alert.configure(foreground=WARNING_COLOR if alerts else IMAGE_ACCENT)
         fill_preview(self.actual_preview, text)
