@@ -77,6 +77,7 @@ from ua_naming.naming import (
 )
 from ua_naming.media import VIDEO_EXTENSIONS
 from ua_naming.planning import Options, build_plan, execute_plan, describe_plan
+from ua_naming.dialogs import confirm_execution
 from ua_naming.settings import load_config
 
 CONFIG = load_config()
@@ -613,12 +614,32 @@ class App(_BaseTk):
         try:
             plan = build_plan(tuple(self.selected_files), self.current_options(), CONFIG)
             text = describe_plan(plan)
+            notice = (f"실행 차단 {len(plan.errors)}건" if plan.errors else
+                      f"경고 {len(plan.warnings)}건 발견" if plan.warnings else "Preview 갱신 완료")
         except Exception as exc:
             text = f"Preview 분석 실패: {exc}"
+            notice = "Preview 분석 실패"
         self.actual_preview.configure(state="normal")
         self.actual_preview.delete("1.0", tk.END)
         self.actual_preview.insert("1.0", text)
         self.actual_preview.configure(state="disabled")
+        self.show_toast(notice)
+
+    def show_toast(self, text):
+        # Nonmodal, does not capture focus or interrupt keyboard navigation.
+        if not hasattr(self, "_toast"):
+            self._toast = ttk.Label(self, padding=(12, 8), relief="solid", takefocus=False)
+            self._toast_job = None
+        if self._toast_job:
+            self.after_cancel(self._toast_job)
+        self._toast.configure(text=text)
+        self._toast.place(relx=1.0, rely=1.0, anchor="se", x=-16, y=-16)
+        self._toast.lift()
+        self._toast_job = self.after(2500, self.hide_toast)
+
+    def hide_toast(self):
+        self._toast.place_forget()
+        self._toast_job = None
 
     def run_process(self):
         try:
@@ -641,15 +662,9 @@ class App(_BaseTk):
         text.configure(state="disabled")
         buttons = ttk.Frame(dialog)
         buttons.pack(fill="x", padx=10, pady=10)
-        accepted = tk.BooleanVar(value=False)
-        ttk.Checkbutton(buttons, text="전체 결과와 경고를 확인했습니다", variable=accepted).pack(anchor="w")
 
         def confirm():
-            if not accepted.get():
-                messagebox.showwarning("확인 필요", "전체 결과와 경고를 확인한 뒤 체크해주세요.", parent=dialog)
-                return
-            if plan.options.overwrite and not messagebox.askyesno(
-                    "원본 변경 확인", "원본 위치 처리입니다. 이름이 바뀌면 원본이 제거됩니다. 계속할까요?", parent=dialog):
+            if not confirm_execution(dialog, plan):
                 return
             dialog.destroy()
             try:
@@ -665,10 +680,25 @@ class App(_BaseTk):
             messagebox.showinfo("처리 결과", detail)
             self.refresh_actual_preview()
 
-        ttk.Button(buttons, text="취소", command=dialog.destroy).pack(side="right")
-        ttk.Button(buttons, text="확인 후 실행", command=confirm,
-                   state="disabled" if plan.errors else "normal").pack(side="right", padx=8)
+        cancel_button = ttk.Button(buttons, text="취소", command=dialog.destroy)
+        cancel_button.pack(side="right")
+        execute_button = ttk.Button(buttons, text="확인 후 실행", command=confirm,
+                                   state="disabled" if plan.errors else "normal")
+        execute_button.pack(side="right", padx=8)
+        text.bind("<Tab>", lambda e: (e.widget.tk_focusNext().focus_set(), "break")[1])
+        text.bind("<Shift-Tab>", lambda e: (e.widget.tk_focusPrev().focus_set(), "break")[1])
+        dialog.bind("<Escape>", lambda e: (dialog.destroy(), "break")[1])
+        def preview_enter(event):
+            if dialog.focus_get() == execute_button and not plan.errors:
+                confirm()
+            elif dialog.focus_get() == cancel_button:
+                dialog.destroy()
+            return "break"
+        dialog.bind("<Return>", preview_enter)
+        dialog.bind("<KP_Enter>", preview_enter)
+        dialog.wait_visibility()
         dialog.grab_set()
+        cancel_button.focus_set()
 
 
 if __name__ == "__main__":
